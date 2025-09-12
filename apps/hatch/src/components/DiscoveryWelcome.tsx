@@ -31,34 +31,60 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
           <div className="flex justify-center mb-6">
             <img src="/logos/nesolagus-horizontal.png" alt="Warren" className="h-12" />
           </div>
-          <h1 className="text-4xl font-semibold text-gray-900 mb-4">
+          <h1 className="text-2xl font-medium text-gray-900 mb-2">
             Discovery Tool
           </h1>
-          <p className="text-lg text-gray-600 mb-2">Community Engagement Discovery</p>
+          <p className="text-base text-gray-600 mb-2">Community Engagement Discovery</p>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Streamline your discovery process to identify stakeholder needs, map objectives, 
             and create actionable insights for strategic planning initiatives.
           </p>
         </div>
 
-        {/* Key Features */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="warren-card text-center">
-            <div className="w-4 h-4 mx-auto mb-4 rounded" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}></div>
-            <h3 className="font-semibold text-gray-900 mb-2">Stakeholder Mapping</h3>
-            <p className="text-gray-600 text-sm">Identify and analyze all community stakeholders and their engagement levels</p>
-          </div>
-          
-          <div className="warren-card text-center">
-            <div className="w-4 h-4 mx-auto mb-4 rounded" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}></div>
-            <h3 className="font-semibold text-gray-900 mb-2">Objective Alignment</h3>
-            <p className="text-gray-600 text-sm">Map project objectives to stakeholder needs and community priorities</p>
-          </div>
-          
-          <div className="warren-card text-center">
-            <div className="w-4 h-4 mx-auto mb-4 rounded" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}></div>
-            <h3 className="font-semibold text-gray-900 mb-2">SOW Generation</h3>
-            <p className="text-gray-600 text-sm">Generate comprehensive statements of work from discovery insights</p>
+        {/* Process Flow */}
+        <div className="mb-12">
+          <h2 className="text-lg font-medium text-gray-900 mb-6 text-center">Your Discovery Journey</h2>
+          <div className="flex items-center justify-center space-x-4 max-w-4xl mx-auto">
+            {/* Step 1 */}
+            <div className="flex-1 text-center">
+              <div className="warren-card p-4">
+                <div className="w-8 h-8 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-medium" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}>1</div>
+                <h3 className="font-medium text-gray-900 mb-1">Map Stakeholders</h3>
+                <p className="text-gray-600 text-xs">Identify key community players</p>
+              </div>
+            </div>
+            
+            {/* Arrow */}
+            <div className="flex-shrink-0 text-gray-400">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+            
+            {/* Step 2 */}
+            <div className="flex-1 text-center">
+              <div className="warren-card p-4">
+                <div className="w-8 h-8 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-medium" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}>2</div>
+                <h3 className="font-medium text-gray-900 mb-1">Align Objectives</h3>
+                <p className="text-gray-600 text-xs">Connect goals with needs</p>
+              </div>
+            </div>
+            
+            {/* Arrow */}
+            <div className="flex-shrink-0 text-gray-400">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+            
+            {/* Step 3 */}
+            <div className="flex-1 text-center">
+              <div className="warren-card p-4">
+                <div className="w-8 h-8 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-medium" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}>3</div>
+                <h3 className="font-medium text-gray-900 mb-1">Generate SOW</h3>
+                <p className="text-gray-600 text-xs">Create actionable roadmap</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -137,7 +163,7 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
             Begin Discovery Process
           </PrimaryButton>
           <p className="text-sm text-gray-600 mt-4">
-            Takes approximately 10-15 minutes
+            Takes approximately 5-7 minutes with AI assistance
           </p>
         </div>
       </div>
