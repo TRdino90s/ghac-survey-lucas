@@ -14,6 +14,11 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
     day: 'numeric' 
   });
 
+  // Helper function to get effective sector for reporting
+  const getEffectiveSector = () => {
+    return data.sector === 'other' ? data.custom_sector : data.sector;
+  };
+
   // Generate strategic insights based on user responses
   const generateInsights = () => {
     const insights = [];
@@ -48,9 +53,15 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
         ]
       };
 
+      const challenges = sectorChallenges[data.sector as keyof typeof sectorChallenges] || [
+        "Engaging diverse stakeholder groups with varying priorities and communication preferences",
+        "Building sustainable participation frameworks that accommodate different availability and engagement styles",
+        "Creating transparent processes that demonstrate how community input influences decision-making"
+      ];
+      
       insights.push({
         category: "Sector-Specific Challenges",
-        items: sectorChallenges[data.sector as keyof typeof sectorChallenges] || []
+        items: challenges
       });
     }
 
@@ -461,7 +472,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
             <div className="mt-8 pt-6 border-t border-green-300">
               <h3 className="text-lg font-medium mb-3 text-gray-900">Project Vision</h3>
               <p className="text-gray-700 leading-relaxed">
-                {data.discovery_notes || `Transform ${data.sector} engagement through innovative stakeholder participation, creating authentic dialogue that builds lasting relationships and drives meaningful community impact across all identified audiences.`}
+                {data.discovery_notes || `Transform ${getEffectiveSector()} engagement through innovative stakeholder participation, creating authentic dialogue that builds lasting relationships and drives meaningful community impact across all identified audiences.`}
               </p>
             </div>
           </div>

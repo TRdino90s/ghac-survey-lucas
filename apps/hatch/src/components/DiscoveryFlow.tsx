@@ -13,7 +13,8 @@ interface DiscoveryData {
   client_name: string;
   project_title: string;
   industry: string;
-  sector: 'educators' | 'nonprofits' | 'campaigns' | 'cities' | '';
+  sector: 'educators' | 'nonprofits' | 'campaigns' | 'cities' | 'political' | 'other' | '';
+  custom_sector: string;
   objectives: string[];
   target_audience: string[];
   pain_points: string[];
@@ -26,11 +27,17 @@ interface DiscoveryData {
 export default function DiscoveryFlow() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showReport, setShowReport] = useState(false);
+
+  // Helper function to get effective sector for AI processing
+  const getEffectiveSector = (data: DiscoveryData) => {
+    return data.sector === 'other' ? data.custom_sector : data.sector;
+  };
   const [discoveryData, setDiscoveryData] = useState<DiscoveryData>({
     client_name: '',
     project_title: '',
     industry: '',
     sector: '',
+    custom_sector: '',
     objectives: [],
     target_audience: [],
     pain_points: [],
@@ -166,7 +173,8 @@ function ProjectBasicsStep({ data, updateData }: { data: DiscoveryData; updateDa
     { value: 'nonprofits', label: 'Nonprofit Organizations' },
     { value: 'campaigns', label: 'Advocacy & Campaign Organizations' },
     { value: 'cities', label: 'Municipal Government & Cities' },
-    { value: 'political', label: 'Political Campaigns & Public Servants' }
+    { value: 'political', label: 'Political Campaigns & Public Servants' },
+    { value: 'other', label: 'Other (please specify)' }
   ];
 
   const industryOptions = [
@@ -216,6 +224,19 @@ function ProjectBasicsStep({ data, updateData }: { data: DiscoveryData; updateDa
             ))}
           </select>
           <p className="text-xs text-gray-500 mt-1">This helps us provide sector-specific insights</p>
+          
+          {data.sector === 'other' && (
+            <div className="mt-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Please specify your sector</label>
+              <input
+                type="text"
+                value={data.custom_sector}
+                onChange={(e) => updateData('custom_sector', e.target.value)}
+                className="warren-input"
+                placeholder="Describe your sector or industry"
+              />
+            </div>
+          )}
         </div>
         
         <div>
@@ -305,7 +326,7 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: data.sector,
+          sector: getEffectiveSector(data),
           industry: data.industry
         }}
       />
@@ -331,7 +352,7 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
           userInput={pendingInput}
           step="objectives"
           industry={data.industry}
-          sector={data.sector}
+          sector={getEffectiveSector(data)}
           projectContext={{
             client_name: data.client_name,
             project_title: data.project_title,
@@ -403,7 +424,7 @@ function AudienceStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: data.sector,
+          sector: getEffectiveSector(data),
           industry: data.industry
         }}
       />
@@ -499,7 +520,7 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: data.sector,
+          sector: getEffectiveSector(data),
           industry: data.industry
         }}
       />
@@ -525,7 +546,7 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
           userInput={pendingInput}
           step="pain_points"
           industry={data.industry}
-          sector={data.sector}
+          sector={getEffectiveSector(data)}
           projectContext={{
             client_name: data.client_name,
             project_title: data.project_title,
@@ -613,7 +634,7 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: data.sector,
+          sector: getEffectiveSector(data),
           industry: data.industry
         }}
       />
@@ -639,7 +660,7 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
           userInput={pendingInput}
           step="success_metrics"
           industry={data.industry}
-          sector={data.sector}
+          sector={getEffectiveSector(data)}
           projectContext={{
             client_name: data.client_name,
             project_title: data.project_title,
@@ -712,7 +733,7 @@ function TimelineBudgetStep({ data, updateData }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: data.sector,
+          sector: getEffectiveSector(data),
           industry: data.industry
         }}
       />

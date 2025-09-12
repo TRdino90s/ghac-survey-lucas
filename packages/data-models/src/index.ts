@@ -25,6 +25,9 @@ export interface SurveyStructure {
 export interface DiscoveryOutline {
   client_name: string;
   project_title: string;
+  industry: string;
+  sector: string;
+  custom_sector: string;
   objectives: string[];
   target_audience: string[];
   pain_points: string[];
@@ -63,7 +66,7 @@ export interface StakeholderGroup {
 
 export interface CommunityIntelligenceReport {
   report_id: string;
-  sector: 'educators' | 'nonprofits' | 'campaigns' | 'cities';
+  sector: 'educators' | 'nonprofits' | 'campaigns' | 'cities' | 'political' | 'other';
   stakeholder_groups: StakeholderGroup[];
   priority_themes: string[];
   engagement_metrics: AnalyticsMetrics;
