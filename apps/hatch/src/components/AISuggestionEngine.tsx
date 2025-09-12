@@ -48,109 +48,76 @@ export default function AISuggestionEngine({
     userSector: string,
     context: typeof projectContext
   ): string => {
-    const warrenKnowledge = {
-      educators: {
-        objectives: {
-          keywords: ['engagement', 'community', 'stakeholder'],
-          expansions: {
-            'engagement': 'meaningful two-way dialogue between educational leaders and diverse community stakeholders, including parents, students, teachers, and local organizations, that builds trust and shared ownership of educational outcomes',
-            'community': 'inclusive representation that reaches beyond traditional PTA networks to include multilingual families, working parents, community-based organizations, and historically underrepresented voices in educational decision-making',
-            'stakeholder': 'comprehensive mapping of all parties affected by educational policies, including direct beneficiaries (students, families), implementers (teachers, staff), decision-makers (board members, administrators), and community partners (local businesses, nonprofits, civic organizations)'
-          }
-        },
-        pain_points: {
-          common: [
-            'Low participation in school board meetings despite high community interest in education',
-            'Language barriers preventing multilingual families from meaningful participation',
-            'Working parents unable to attend traditional meeting times',
-            'Complex educational policies that need translation into accessible language',
-            'Mistrust between administration and community due to past communication failures'
-          ]
-        },
-        success_metrics: {
-          quantitative: [
-            'Survey response rates from at least 15% of families across all demographic groups',
-            'Meeting attendance that reflects district demographics within 5% margin',
-            'Policy feedback received in multiple languages representing district population'
-          ],
-          qualitative: [
-            'Stories of families feeling heard and valued in the decision-making process',
-            'Evidence of community recommendations being incorporated into final policies',
-            'Testimonials from educators about improved community relationships'
-          ]
-        }
-      },
-      nonprofits: {
-        objectives: {
-          keywords: ['impact', 'community', 'sustainability'],
-          expansions: {
-            'impact': 'measurable improvement in the lives of people served, with clear pathways from program activities to long-term community outcomes, documented through both data and participant stories',
-            'community': 'authentic partnerships with the populations served, where community members shape program design, implementation, and evaluation rather than being passive recipients',
-            'sustainability': 'long-term organizational health that balances mission delivery with financial stability, stakeholder support, and adaptive capacity to meet evolving community needs'
-          }
-        }
-      },
-      cities: {
-        objectives: {
-          keywords: ['transparency', 'engagement', 'equity'],
-          expansions: {
-            'transparency': 'proactive information sharing that makes government processes accessible to all residents, including multilingual communication, plain-language explanations of complex policies, and clear timelines for decision-making',
-            'engagement': 'meaningful opportunities for residents to influence decisions that affect their daily lives, with multiple participation channels that accommodate different schedules, languages, and comfort levels',
-            'equity': 'intentional focus on including voices that have been historically excluded from civic processes, with specific outreach to communities of color, renters, working families, and residents with limited English proficiency'
-          }
-        }
-      }
-    };
-
-    // Industry-specific knowledge
-    const industryInsights = {
-      'healthcare': 'patient-centered approaches, health equity considerations, regulatory compliance requirements',
-      'housing': 'affordable housing advocacy, tenant rights, community development impacts',
-      'environment': 'climate resilience, environmental justice, sustainable development practices',
-      'economic development': 'small business support, workforce development, gentrification concerns'
-    };
-
-    // Context-aware expansion based on GHAC-style deep discovery
-    let expansion = input;
+    
+    // Analyze the actual user input for key concepts and themes
+    const inputLower = input.toLowerCase();
+    const words = inputLower.split(/\s+/);
+    
+    // Context-aware response generation based on actual user input
+    let response = '';
     
     if (currentStep === 'objectives') {
-      const sectorKnowledge = warrenKnowledge[userSector as keyof typeof warrenKnowledge];
-      if (sectorKnowledge) {
-        Object.entries(sectorKnowledge.objectives.expansions).forEach(([keyword, definition]) => {
-          if (input.toLowerCase().includes(keyword)) {
-            expansion = `${input}\n\nExpanded context: ${definition}`;
-          }
-        });
+      // Analyze what the user is trying to achieve
+      if (inputLower.includes('constituent') || inputLower.includes('voter') || inputLower.includes('campaign') || inputLower.includes('election')) {
+        response = `${input}\n\nExpanded Strategic Context:\nPolitical engagement requires authentic listening to understand constituent priorities before advocacy. Consider:\n\n• Multi-modal feedback collection (town halls, digital surveys, one-on-one conversations)\n• Geographic and demographic representation analysis to ensure all voices are heard\n• Issue prioritization frameworks that balance immediate concerns with long-term impact\n• Transparency mechanisms that show how constituent input influences policy positions`;
       }
-      
-      // Add industry-specific context
-      if (userIndustry && industryInsights[userIndustry as keyof typeof industryInsights]) {
-        expansion += `\n\nIndustry considerations: ${industryInsights[userIndustry as keyof typeof industryInsights]}`;
+      else if (inputLower.includes('engagement') || inputLower.includes('participat') || inputLower.includes('involve')) {
+        const sector = userSector || 'community';
+        response = `${input}\n\nWarren Insight:\nMeaningful engagement in the ${sector} sector requires moving beyond traditional one-way communication to authentic dialogue. Based on our experience:\n\n• Create multiple entry points for different comfort levels and availability\n• Design feedback loops that show community input directly influences decisions\n• Build trust through consistent follow-through and transparent decision-making\n• Address barriers like language, timing, and accessibility that prevent participation`;
       }
-    }
-    
-    if (currentStep === 'pain_points' && userSector) {
-      const sectorKnowledge = warrenKnowledge[userSector as keyof typeof warrenKnowledge];
-      if (sectorKnowledge?.pain_points?.common) {
-        const relatedPains = sectorKnowledge.pain_points.common
-          .filter(pain => pain.toLowerCase().includes(input.toLowerCase().split(' ')[0]))
-          .slice(0, 2);
+      else if (inputLower.includes('trust') || inputLower.includes('relationship') || inputLower.includes('connection')) {
+        response = `${input}\n\nRelationship-Building Framework:\nTrust is built through consistent actions over time. Our GHAC work showed that lasting relationships require:\n\n• Authentic vulnerability - acknowledging what you don't know and need to learn\n• Consistent presence - showing up even when there's no immediate agenda\n• Responsive action - demonstrating that community input leads to real change\n• Shared ownership - involving community members in designing solutions, not just providing feedback`;
+      }
+      else if (inputLower.includes('understand') || inputLower.includes('learn') || inputLower.includes('discover') || inputLower.includes('find out')) {
+        response = `${input}\n\nDiscovery-Centered Approach:\nYour instinct to prioritize understanding before action aligns with Warren's methodology. Effective discovery includes:\n\n• Deep listening sessions with diverse stakeholder groups\n• Asset mapping to understand existing community strengths and networks\n• Historical context research to understand past engagement efforts and their outcomes\n• Multiple data collection methods to capture different perspectives and communication styles`;
+      }
+      else if (inputLower.includes('transparent') || inputLower.includes('accountab') || inputLower.includes('open')) {
+        response = `${input}\n\nTransparency as Foundation:\nTransparency builds credibility and enables meaningful participation. Consider:\n\n• Proactive information sharing in accessible formats and languages\n• Clear processes for how decisions are made and community input is incorporated\n• Regular progress updates that acknowledge both successes and challenges\n• Open data practices that allow community members to analyze and understand key information`;
+      }
+      else {
+        // Generic thoughtful expansion based on sector
+        const sectorContext = {
+          'campaigns': 'Effective political campaigns balance ambitious vision with practical implementation, ensuring constituent voices drive policy priorities rather than partisan talking points.',
+          'educators': 'Educational transformation requires engaging all stakeholders - students, families, educators, and community partners - in collaborative decision-making processes.',
+          'nonprofits': 'Sustainable nonprofit impact comes from centering the voices and experiences of the communities being served in all program design and evaluation.',
+          'cities': 'Municipal effectiveness depends on creating accessible pathways for resident participation in local decision-making processes.'
+        };
         
-        if (relatedPains.length > 0) {
-          expansion += `\n\nRelated challenges we often see in ${userSector}:\n${relatedPains.map(p => `• ${p}`).join('\n')}`;
-        }
+        const contextual = sectorContext[userSector as keyof typeof sectorContext] || 'Community engagement requires authentic dialogue and shared ownership of outcomes.';
+        response = `${input}\n\nStrategic Enhancement:\n${contextual}\n\nTo strengthen this objective, consider:\n• What specific outcomes will demonstrate success?\n• Who are the key stakeholders who must be engaged?\n• What barriers currently prevent optimal results?\n• How will you measure both quantitative progress and qualitative impact?`;
       }
     }
     
-    if (currentStep === 'success_metrics' && userSector) {
-      const sectorKnowledge = warrenKnowledge[userSector as keyof typeof warrenKnowledge];
-      if (sectorKnowledge?.success_metrics) {
-        expansion += `\n\nSuggested quantitative metrics:\n${sectorKnowledge.success_metrics.quantitative?.slice(0, 2).map(m => `• ${m}`).join('\n') || ''}`;
-        expansion += `\n\nSuggested qualitative indicators:\n${sectorKnowledge.success_metrics.qualitative?.slice(0, 2).map(m => `• ${m}`).join('\n') || ''}`;
+    else if (currentStep === 'pain_points') {
+      // Analyze challenges and provide strategic solutions
+      if (inputLower.includes('time') || inputLower.includes('schedule') || inputLower.includes('busy')) {
+        response = `${input}\n\nStrategic Solution Framework:\nTime constraints are among the most common barriers to community engagement. Warren's approach addresses this through:\n\n• Multiple engagement channels (quick surveys, brief video responses, asynchronous discussions)\n• Meeting time diversity (early morning, evening, weekend options)\n• Micro-engagement opportunities (5-minute feedback moments, text-based input)\n• Summary and synthesis services that respect people's time while ensuring their voices are heard`;
+      }
+      else if (inputLower.includes('language') || inputLower.includes('communicat') || inputLower.includes('understand')) {
+        response = `${input}\n\nCommunication Accessibility Solutions:\nLanguage and communication barriers require systematic solutions:\n\n• Professional translation services for key materials and meetings\n• Visual communication tools that transcend language barriers\n• Community liaison programs with trusted messengers\n• Multiple format options (written, verbal, visual, digital) to accommodate different communication preferences`;
+      }
+      else if (inputLower.includes('trust') || inputLower.includes('skeptic') || inputLower.includes('participat')) {
+        response = `${input}\n\nTrust-Building Strategy:\nSkepticism often stems from past experiences of consultation without action. Address this through:\n\n• Transparent acknowledgment of past engagement failures\n• Small, visible wins that demonstrate responsiveness to community input\n• Clear commitment to how feedback will be used and decision-making processes\n• Community ownership opportunities that move beyond consultation to genuine partnership`;
+      }
+      else {
+        response = `${input}\n\nProblem-Solving Approach:\nThis challenge requires systematic analysis and strategic intervention. Consider:\n\n• Root cause analysis - what underlying systems or structures create this problem?\n• Stakeholder impact assessment - who is most affected and how?\n• Resource mapping - what assets and capabilities exist to address this?\n• Implementation pathway - what sequence of actions could create sustainable change?`;
       }
     }
     
-    return expansion;
+    else if (currentStep === 'success_metrics') {
+      // Help develop comprehensive measurement frameworks
+      if (inputLower.includes('particip') || inputLower.includes('engag') || inputLower.includes('involve')) {
+        response = `${input}\n\nComprehensive Participation Metrics:\nMeasuring engagement requires both breadth and depth indicators:\n\nQuantitative measures:\n• Response rates across demographic groups\n• Geographic distribution of participants\n• Repeat engagement over time\n\nQualitative indicators:\n• Participant testimonials about feeling heard\n• Evidence of community input in final decisions\n• Changes in community trust and relationship quality`;
+      }
+      else if (inputLower.includes('outcome') || inputLower.includes('impact') || inputLower.includes('result')) {
+        response = `${input}\n\nOutcome Measurement Framework:\nImpact assessment should capture both immediate and long-term change:\n\n• Short-term: Process improvements, increased participation, enhanced communication\n• Medium-term: Policy changes, program adjustments, relationship quality improvements\n• Long-term: Community capacity building, sustained engagement, systemic change\n\nEnsure measurement includes both beneficiary perspectives and organizational learning.`;
+      }
+      else {
+        response = `${input}\n\nStrategic Measurement Enhancement:\nEffective metrics balance quantitative data with qualitative insights:\n\n• Process metrics - are we implementing as planned?\n• Outcome metrics - are we achieving intended results?\n• Impact metrics - what long-term change are we creating?\n• Learning metrics - how is our approach evolving based on community feedback?`;
+      }
+    }
+    
+    return response || input;
   };
 
   const handleAccept = () => {

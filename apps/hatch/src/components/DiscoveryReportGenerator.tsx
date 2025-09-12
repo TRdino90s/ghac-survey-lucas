@@ -353,62 +353,125 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
         <section>
           <h2 className="text-2xl font-medium text-gray-900 mb-6">7. Project Overview</h2>
           
-          <div className="bg-gray-800 text-white p-8 rounded-lg">
+          <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 p-8 rounded-lg">
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="text-3xl font-bold text-green-400 mb-2">{data.objectives.length}</div>
-                <div className="text-sm text-gray-300">Strategic Objectives</div>
+                <div className="text-3xl font-bold mb-2" style={{ color: '#64B37A' }}>{data.objectives.length}</div>
+                <div className="text-sm text-gray-700">Strategic Objectives</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-blue-400 mb-2">{data.target_audience.length}</div>
-                <div className="text-sm text-gray-300">Stakeholder Groups</div>
+                <div className="text-3xl font-bold mb-2" style={{ color: '#64B37A' }}>{data.target_audience.length}</div>
+                <div className="text-sm text-gray-700">Stakeholder Groups</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-purple-400 mb-2">{data.success_metrics.length}</div>
-                <div className="text-sm text-gray-300">Success Metrics</div>
+                <div className="text-3xl font-bold mb-2" style={{ color: '#64B37A' }}>{data.success_metrics.length}</div>
+                <div className="text-sm text-gray-700">Success Metrics</div>
               </div>
             </div>
             
-            <div className="mt-8 pt-6 border-t border-gray-700">
-              <h3 className="text-lg font-medium mb-3">Project Vision</h3>
-              <p className="text-gray-300">
+            <div className="mt-8 pt-6 border-t border-green-300">
+              <h3 className="text-lg font-medium mb-3 text-gray-900">Project Vision</h3>
+              <p className="text-gray-700 leading-relaxed">
                 {data.discovery_notes || `Transform ${data.sector} engagement through innovative stakeholder participation, creating authentic dialogue that builds lasting relationships and drives meaningful community impact across all identified audiences.`}
               </p>
             </div>
           </div>
         </section>
 
-        {/* Next Steps */}
+        {/* Preview Notice */}
+        <section className="pb-8">
+          <div className="bg-gradient-to-r from-blue-50 to-green-50 border-2 border-green-300 rounded-xl p-8 text-center">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                🎯 This is Your Strategic Preview
+              </h2>
+              <p className="text-lg text-gray-700 mb-6">
+                You've just experienced a glimpse of what's possible. This discovery outline represents the foundation 
+                for a comprehensive Statement of Work that will transform your stakeholder engagement strategy.
+              </p>
+              
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-green-200 mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">The Complete Package Includes:</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-left">
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Detailed stakeholder mapping & analysis
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Custom engagement strategy design
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Implementation roadmap with milestones
+                    </li>
+                  </ul>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Success metrics & evaluation framework
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Resource requirements & budget planning
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Ongoing support & optimization plan
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => window.open('https://calendly.com/warren-team', '_blank')}
+                  className="px-8 py-4 text-white rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                  style={{ backgroundColor: '#64B37A' }}
+                >
+                  Schedule Your Strategy Session
+                </button>
+                <button
+                  onClick={() => window.location.href = 'mailto:hello@warren.tools?subject=Full Discovery SOW Request&body=I completed the discovery tool and would like to discuss a comprehensive Statement of Work.'}
+                  className="px-8 py-4 border-2 rounded-lg font-semibold text-lg hover:bg-green-50 transition-all"
+                  style={{ borderColor: '#64B37A', color: '#64B37A' }}
+                >
+                  Get Full SOW Quote
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-600 mt-4">
+                Transform your community engagement approach with Warren's proven methodology
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Implementation Support */}
         <section className="pb-12">
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">8. Next Steps</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">8. Ready to Implement?</h2>
           
           <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Immediate Actions</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Your Next Steps</h3>
             <ul className="space-y-3">
               <li className="flex items-start text-sm text-gray-700">
                 <span className="text-green-600 mr-2">1.</span>
-                Review and approve this strategic framework with key stakeholders
+                Share this strategic preview with your key stakeholders
               </li>
               <li className="flex items-start text-sm text-gray-700">
                 <span className="text-green-600 mr-2">2.</span>
-                Schedule implementation planning workshop with project team
+                Schedule a strategy session to dive deeper into implementation
               </li>
               <li className="flex items-start text-sm text-gray-700">
                 <span className="text-green-600 mr-2">3.</span>
-                Identify specific resource requirements and timeline dependencies
+                Receive your comprehensive Statement of Work with detailed timeline and pricing
               </li>
               <li className="flex items-start text-sm text-gray-700">
                 <span className="text-green-600 mr-2">4.</span>
-                Begin stakeholder mapping and initial outreach preparations
+                Begin transforming your community engagement approach with Warren's support
               </li>
             </ul>
-            
-            <div className="mt-6 p-4 bg-white rounded border border-green-300">
-              <p className="text-sm text-gray-700">
-                <strong>Ready to move forward?</strong> Contact our team to schedule your implementation planning session 
-                and begin transforming your community engagement approach.
-              </p>
-            </div>
           </div>
         </section>
       </div>
