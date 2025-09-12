@@ -176,7 +176,7 @@ export default function AISuggestionEngine({
               🚀 Want to expand on "{userInput.substring(0, 50)}${userInput.length > 50 ? '...' : ''}"?
             </p>
             <p className="text-xs text-gray-600 mt-1">
-              Let our AI suggest deeper insights based on {sector || 'your sector'} expertise and successful projects like GHAC.
+              Let our team suggest deeper insights based on {sector || 'your sector'} expertise and successful projects like GHAC.
             </p>
           </div>
           <button
@@ -191,14 +191,14 @@ export default function AISuggestionEngine({
       {showSuggestion && (
         <div className="warren-card p-4 border-2" style={{ borderColor: '#64B37A' }}>
           <div className="flex items-center justify-between mb-3">
-            <h4 className="font-semibold" style={{ color: '#64B37A' }}>AI-Suggested Expansion</h4>
+            <h4 className="font-semibold" style={{ color: '#64B37A' }}>Warren Suggested Expansion</h4>
             <div className="warren-badge text-xs">Warren Intelligence</div>
           </div>
           
           {isGenerating ? (
             <div className="flex items-center gap-3 py-4">
               <div className="animate-spin w-5 h-5 border-2 border-gray-300 border-t-green-600 rounded-full"></div>
-              <span className="text-gray-600">Analyzing your input with Warren's expertise...</span>
+              <span className="text-gray-600">Analyzing your input with Warren's community engagement expertise...</span>
             </div>
           ) : (
             <>

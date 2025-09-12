@@ -257,8 +257,8 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
   const [pendingInput, setPendingInput] = useState('');
 
   const handleAdd = () => {
-    if (inputValue.length > 15) {
-      // Show AI suggestion for longer inputs
+    if (inputValue.length > 10) {
+      // Show Warren suggestion for detailed inputs
       setPendingInput(inputValue);
     } else {
       addToArray('objectives', inputValue);
@@ -305,7 +305,7 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
           className="warren-input flex-1"
-          placeholder="Enter an objective and press Enter (detailed entries get AI enhancement)"
+          placeholder="Enter an objective and press Enter (detailed entries get Warren enhancement)"
         />
         <PrimaryButton
           onClick={handleAdd}
@@ -349,7 +349,7 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
       {data.objectives.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <p>No objectives added yet.</p>
-          <p className="text-sm">Use the examples above or enter detailed objectives to get AI-enhanced suggestions!</p>
+          <p className="text-sm">Use the examples above or enter detailed objectives to get Warren-enhanced suggestions!</p>
         </div>
       )}
     </div>
@@ -430,7 +430,7 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
   const [pendingInput, setPendingInput] = useState('');
 
   const handleAdd = () => {
-    if (inputValue.length > 15) {
+    if (inputValue.length > 10) {
       setPendingInput(inputValue);
     } else {
       addToArray('pain_points', inputValue);
@@ -477,7 +477,7 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
           className="warren-input flex-1"
-          placeholder="Describe a challenge (detailed entries get AI enhancement)"
+          placeholder="Describe a challenge (detailed entries get Warren enhancement)"
         />
         <PrimaryButton
           onClick={handleAdd}
@@ -530,7 +530,7 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
   const [pendingInput, setPendingInput] = useState('');
 
   const handleAdd = () => {
-    if (inputValue.length > 15) {
+    if (inputValue.length > 10) {
       setPendingInput(inputValue);
     } else {
       addToArray('success_metrics', inputValue);
@@ -577,7 +577,7 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
           className="warren-input flex-1"
-          placeholder="How will you measure success? (detailed entries get AI enhancement)"
+          placeholder="How will you measure success? (detailed entries get Warren enhancement)"
         />
         <PrimaryButton
           onClick={handleAdd}
