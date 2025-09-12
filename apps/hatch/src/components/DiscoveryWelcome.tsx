@@ -205,7 +205,6 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
           </div>
         </div>
       </div>
-    </div>
 
       {/* Privacy Policy Modal */}
       {showPrivacyModal && (
@@ -279,6 +278,6 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
