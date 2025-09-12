@@ -22,151 +22,190 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
   };
 
   return (
-    <section className="p-6 space-y-6">
-      <div className="max-w-4xl mx-auto">
-        <ClientThemeVars />
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <img src="/logos/nesolagus-horizontal.png" alt="Warren" className="h-12" />
-          </div>
-          <h1 className="text-2xl font-medium text-gray-900 mb-2">
-            Discovery Tool
-          </h1>
-          <p className="text-base text-gray-600 mb-2">Community Engagement Discovery</p>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Streamline your discovery process to identify stakeholder needs, map objectives, 
-            and create actionable insights for strategic planning initiatives.
-          </p>
-        </div>
-
-        {/* Process Flow */}
-        <div className="mb-12">
-          <h2 className="text-lg font-medium text-gray-900 mb-6 text-center">Your Discovery Journey</h2>
-          <div className="flex items-center justify-center space-x-4 max-w-4xl mx-auto">
-            {/* Step 1 */}
-            <div className="flex-1 text-center">
-              <div className="warren-card p-4">
-                <div className="w-8 h-8 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-medium" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}>1</div>
-                <h3 className="font-medium text-gray-900 mb-1">Map Stakeholders</h3>
-                <p className="text-gray-600 text-xs">Identify key community players</p>
-              </div>
-            </div>
-            
-            {/* Arrow */}
-            <div className="flex-shrink-0 text-gray-400">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-            
-            {/* Step 2 */}
-            <div className="flex-1 text-center">
-              <div className="warren-card p-4">
-                <div className="w-8 h-8 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-medium" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}>2</div>
-                <h3 className="font-medium text-gray-900 mb-1">Align Objectives</h3>
-                <p className="text-gray-600 text-xs">Connect goals with needs</p>
-              </div>
-            </div>
-            
-            {/* Arrow */}
-            <div className="flex-shrink-0 text-gray-400">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-            
-            {/* Step 3 */}
-            <div className="flex-1 text-center">
-              <div className="warren-card p-4">
-                <div className="w-8 h-8 mx-auto mb-3 rounded-full flex items-center justify-center text-white font-medium" style={{ backgroundColor: 'var(--brand-from, #64B37A)' }}>3</div>
-                <h3 className="font-medium text-gray-900 mb-1">Generate SOW</h3>
-                <p className="text-gray-600 text-xs">Create actionable roadmap</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Privacy Compliance Section */}
-        <div className="mb-8 warren-card" style={{ backgroundColor: '#E6F4EA' }}>
-          <h3 className="font-semibold text-gray-900 mb-4">Data Privacy & Security</h3>
-          
-          {/* Age Verification for COPPA/FERPA Compliance */}
-          <div className="mb-4">
-            <p className="text-sm text-gray-700 mb-2">Age verification (required for youth data protection):</p>
-            <div className="flex gap-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="age"
-                  className="mr-2"
-                  onChange={() => setUserAge('adult')}
-                />
-                <span className="text-sm">18 years or older</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="age"
-                  className="mr-2"
-                  onChange={() => setUserAge('minor')}
-                />
-                <span className="text-sm">Under 18 years</span>
-              </label>
-            </div>
-            {userAge === 'minor' && (
-              <div className="mt-2 p-3 bg-yellow-100 border border-yellow-300 rounded text-sm">
-                ⚠️ Additional parental consent may be required under COPPA and FERPA regulations. 
-                Please ensure proper authorization before proceeding.
-              </div>
-            )}
-          </div>
-
-          {/* Privacy Policy Acceptance */}
-          <div className="flex items-start space-x-3">
-            <input
-              type="checkbox"
-              id="privacy"
-              className="mt-1"
-              checked={acceptedPrivacy}
-              onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-            />
-            <label htmlFor="privacy" className="text-sm text-gray-700 flex-1">
-              I acknowledge that I have read and agree to the{' '}
-              <button
-                type="button"
-                className="underline font-medium"
-                style={{ color: '#64B37A' }}
-                onClick={() => setShowPrivacyModal(true)}
-              >
-                Privacy Policy
-              </button>
-              , including GDPR, COPPA, FERPA, and Connecticut data protection requirements.
-              <br />
-              <span className="text-xs text-gray-600 mt-1 block">
-                We employ SOC 2 equivalent security measures and never sell personal data.
-              </span>
-            </label>
-          </div>
-        </div>
-
-        {/* Start Button */}
-        <div className="text-center">
-          <PrimaryButton
-            onClick={handleStart}
-            disabled={!acceptedPrivacy || !userAge}
-            className={`px-8 py-4 text-lg ${
-              !acceptedPrivacy || !userAge ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            Begin Discovery Process
-          </PrimaryButton>
-          <p className="text-sm text-gray-600 mt-4">
-            Takes approximately 5-7 minutes with AI assistance
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      <ClientThemeVars />
+      
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <img src="/logos/nesolagus-horizontal.png" alt="Warren" className="h-10" />
         </div>
       </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="grid lg:grid-cols-12 gap-12">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-7">
+            <div className="mb-8">
+              <h1 className="text-3xl font-medium text-gray-900 mb-4">
+                Community Engagement Discovery
+              </h1>
+              <p className="text-lg text-gray-600 mb-6">
+                Transform your stakeholder engagement strategy with our AI-powered discovery process. 
+                Get actionable insights and a custom Statement of Work in minutes.
+              </p>
+              <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  5-7 minutes
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  AI-powered insights
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Instant SOW generation
+                </div>
+              </div>
+            </div>
+
+            {/* What You'll Get */}
+            <div className="mb-8">
+              <h2 className="text-xl font-medium text-gray-900 mb-4">What you'll discover</h2>
+              <div className="space-y-3">
+                <div className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                    <span className="text-green-600 text-sm font-medium">1</span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Stakeholder Landscape</h3>
+                    <p className="text-gray-600 text-sm">Map all community players and their engagement levels</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                    <span className="text-green-600 text-sm font-medium">2</span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Strategic Alignment</h3>
+                    <p className="text-gray-600 text-sm">Connect your objectives with community needs and priorities</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                    <span className="text-green-600 text-sm font-medium">3</span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Actionable Roadmap</h3>
+                    <p className="text-gray-600 text-sm">Receive a comprehensive Statement of Work with next steps</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Form */}
+          <div className="lg:col-span-5">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="font-medium text-gray-900 mb-4">Get Started</h3>
+              
+              {/* Age Verification */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">Age verification</label>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="age"
+                      className="mr-3"
+                      onChange={() => setUserAge('adult')}
+                      style={{ accentColor: '#64B37A' }}
+                    />
+                    <span className="text-sm text-gray-700">18 years or older</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="age"
+                      className="mr-3"
+                      onChange={() => setUserAge('minor')}
+                      style={{ accentColor: '#64B37A' }}
+                    />
+                    <span className="text-sm text-gray-700">Under 18 years</span>
+                  </label>
+                </div>
+                {userAge === 'minor' && (
+                  <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
+                    ⚠️ Additional parental consent may be required under COPPA and FERPA regulations.
+                  </div>
+                )}
+              </div>
+
+              {/* Privacy Compliance */}
+              <div className="mb-6">
+                <div className="flex items-start space-x-3">
+                  <input
+                    type="checkbox"
+                    id="privacy"
+                    className="mt-1"
+                    checked={acceptedPrivacy}
+                    onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                    style={{ accentColor: '#64B37A' }}
+                  />
+                  <label htmlFor="privacy" className="text-sm text-gray-700 flex-1">
+                    I agree to the{' '}
+                    <button
+                      type="button"
+                      className="text-green-600 underline hover:text-green-700"
+                      onClick={() => setShowPrivacyModal(true)}
+                    >
+                      Privacy Policy
+                    </button>
+                    {' '}and data protection terms.
+                    <div className="text-xs text-gray-500 mt-1">
+                      GDPR, COPPA, FERPA compliant • SOC 2 security • No data sales
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Start Button */}
+              <PrimaryButton
+                onClick={handleStart}
+                disabled={!acceptedPrivacy || !userAge}
+                className={`w-full py-3 ${
+                  !acceptedPrivacy || !userAge ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                Start Discovery Process
+              </PrimaryButton>
+              
+              <div className="mt-3 text-center">
+                <p className="text-xs text-gray-500">
+                  Completes in 5-7 minutes • Free consultation included
+                </p>
+              </div>
+            </div>
+            
+            {/* Trust Indicators */}
+            <div className="mt-6 text-center">
+              <div className="flex items-center justify-center space-x-6 text-xs text-gray-500">
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Secure
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Trusted by 100+ organizations
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
       {/* Privacy Policy Modal */}
       {showPrivacyModal && (
