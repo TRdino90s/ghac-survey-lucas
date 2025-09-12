@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { DiscoveryOutline } from '@warren/data-models';
 import StepHelper from './StepHelper';
 import AISuggestionEngine from './AISuggestionEngine';
+import DiscoveryReportGenerator from './DiscoveryReportGenerator';
 import PrimaryButton from '@/components/ui/primary-button';
 import AppHeader from '@/components/ui/app-header';
 import ClientThemeVars from '@/components/ui/ClientThemeVars';
@@ -24,6 +25,7 @@ interface DiscoveryData {
 
 export default function DiscoveryFlow() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showReport, setShowReport] = useState(false);
   const [discoveryData, setDiscoveryData] = useState<DiscoveryData>({
     client_name: '',
     project_title: '',
@@ -75,6 +77,10 @@ export default function DiscoveryFlow() {
     URL.revokeObjectURL(url);
   };
 
+  const handleGenerateReport = () => {
+    setShowReport(true);
+  };
+
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -90,11 +96,16 @@ export default function DiscoveryFlow() {
       case 6:
         return <TimelineBudgetStep data={discoveryData} updateData={updateData} />;
       case 7:
-        return <ReviewStep data={discoveryData} onExport={handleExport} />;
+        return <ReviewStep data={discoveryData} onExport={handleExport} onGenerateReport={handleGenerateReport} />;
       default:
         return null;
     }
   };
+
+  // Show the comprehensive report if generated
+  if (showReport) {
+    return <DiscoveryReportGenerator data={generateDiscoveryOutline()} />;
+  }
 
   return (
     <section className="p-6 space-y-6">
@@ -698,65 +709,111 @@ function TimelineBudgetStep({ data, updateData }: {
   );
 }
 
-function ReviewStep({ data, onExport }: { data: DiscoveryData; onExport: () => void }) {
+function ReviewStep({ 
+  data, 
+  onExport, 
+  onGenerateReport 
+}: { 
+  data: DiscoveryData; 
+  onExport: () => void;
+  onGenerateReport: () => void;
+}) {
   return (
     <div className="space-y-6">
       <h3 className="font-semibold text-gray-900 mb-4">Discovery Summary</h3>
-      <p className="text-gray-600 mb-6">Review your discovery outline before generating your Statement of Work.</p>
+      <p className="text-gray-600 mb-6">Review your discovery outline and generate your comprehensive strategic report.</p>
       
       <div className="space-y-4">
         <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
           <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Project Information</h3>
           <p><strong>Client:</strong> {data.client_name}</p>
           <p><strong>Project:</strong> {data.project_title}</p>
+          <p><strong>Sector:</strong> {data.sector}</p>
+          <p><strong>Industry:</strong> {data.industry}</p>
           <p><strong>Timeline:</strong> {data.timeline}</p>
           <p><strong>Budget:</strong> {data.budget_range}</p>
         </div>
         
-        <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
-          <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Objectives ({data.objectives.length})</h3>
-          <ul className="list-disc list-inside space-y-1">
-            {data.objectives.map((obj, i) => <li key={i} className="text-gray-700">{obj}</li>)}
-          </ul>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
+            <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Objectives ({data.objectives.length})</h3>
+            <ul className="list-disc list-inside space-y-1 text-sm">
+              {data.objectives.slice(0, 3).map((obj, i) => (
+                <li key={i} className="text-gray-700">
+                  {obj.length > 80 ? `${obj.substring(0, 80)}...` : obj}
+                </li>
+              ))}
+              {data.objectives.length > 3 && (
+                <li className="text-gray-500 italic">...and {data.objectives.length - 3} more</li>
+              )}
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
+            <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Target Audience ({data.target_audience.length})</h3>
+            <ul className="list-disc list-inside space-y-1 text-sm">
+              {data.target_audience.slice(0, 3).map((aud, i) => <li key={i} className="text-gray-700">{aud}</li>)}
+              {data.target_audience.length > 3 && (
+                <li className="text-gray-500 italic">...and {data.target_audience.length - 3} more</li>
+              )}
+            </ul>
+          </div>
         </div>
         
-        <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
-          <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Target Audience ({data.target_audience.length})</h3>
-          <ul className="list-disc list-inside space-y-1">
-            {data.target_audience.map((aud, i) => <li key={i} className="text-gray-700">{aud}</li>)}
-          </ul>
-        </div>
-        
-        <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
-          <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Pain Points ({data.pain_points.length})</h3>
-          <ul className="list-disc list-inside space-y-1">
-            {data.pain_points.map((pain, i) => <li key={i} className="text-gray-700">{pain}</li>)}
-          </ul>
-        </div>
-        
-        <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
-          <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Success Metrics ({data.success_metrics.length})</h3>
-          <ul className="list-disc list-inside space-y-1">
-            {data.success_metrics.map((metric, i) => <li key={i} className="text-gray-700">{metric}</li>)}
-          </ul>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
+            <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Pain Points ({data.pain_points.length})</h3>
+            <ul className="list-disc list-inside space-y-1 text-sm">
+              {data.pain_points.slice(0, 3).map((pain, i) => (
+                <li key={i} className="text-gray-700">
+                  {pain.length > 60 ? `${pain.substring(0, 60)}...` : pain}
+                </li>
+              ))}
+              {data.pain_points.length > 3 && (
+                <li className="text-gray-500 italic">...and {data.pain_points.length - 3} more</li>
+              )}
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#E6F4EA' }}>
+            <h3 className="font-semibold mb-2" style={{ color: '#64B37A' }}>Success Metrics ({data.success_metrics.length})</h3>
+            <ul className="list-disc list-inside space-y-1 text-sm">
+              {data.success_metrics.slice(0, 3).map((metric, i) => (
+                <li key={i} className="text-gray-700">
+                  {metric.length > 60 ? `${metric.substring(0, 60)}...` : metric}
+                </li>
+              ))}
+              {data.success_metrics.length > 3 && (
+                <li className="text-gray-500 italic">...and {data.success_metrics.length - 3} more</li>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
       
-      <div className="flex gap-4 justify-center pt-6">
-        <button
-          onClick={onExport}
-          className="px-8 py-3 text-white rounded-lg font-medium"
-          style={{ backgroundColor: '#64B37A' }}
-        >
-          Export Discovery Outline
-        </button>
-        <button
-          onClick={() => alert('SOW Generation coming soon!')}
-          className="px-8 py-3 border-2 rounded-lg font-medium"
-          style={{ borderColor: '#64B37A', color: '#64B37A' }}
-        >
-          Generate SOW
-        </button>
+      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border border-green-200">
+        <h3 className="font-semibold mb-3" style={{ color: '#64B37A' }}>🚀 Ready for Your Strategic Report?</h3>
+        <p className="text-gray-700 mb-4">
+          Generate a comprehensive strategic implementation outline with timeline graphics, detailed analysis, 
+          and sector-specific recommendations based on your responses.
+        </p>
+        
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={onGenerateReport}
+            className="px-8 py-3 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-shadow"
+            style={{ backgroundColor: '#64B37A' }}
+          >
+            Generate Strategic Report
+          </button>
+          <button
+            onClick={onExport}
+            className="px-6 py-3 border-2 rounded-lg font-medium hover:bg-green-50 transition-colors"
+            style={{ borderColor: '#64B37A', color: '#64B37A' }}
+          >
+            Export Raw Data
+          </button>
+        </div>
       </div>
     </div>
   );
