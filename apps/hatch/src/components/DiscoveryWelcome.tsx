@@ -99,6 +99,17 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
                   </div>
                 </div>
               </div>
+              
+              {/* Preview Sample */}
+              <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
+                <div className="text-xs text-green-700 font-medium mb-2">SAMPLE DELIVERABLE</div>
+                <div className="text-sm font-medium text-gray-900 mb-1">Strategic Implementation Framework</div>
+                <div className="text-xs text-gray-600 mb-3">Multi-channel communication strategies, inclusive participation design, and phased implementation methodology...</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-gray-500">8-section comprehensive report</div>
+                  <div className="text-xs text-green-600 font-medium">Generated in 5 minutes</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -180,7 +191,7 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
               
               <div className="mt-3 text-center">
                 <p className="text-xs text-gray-500">
-                  Completes in 5-7 minutes • Free consultation included
+                  Get a comprehensive Discovery Scope in just 5 minutes • Free consultation included (yes, with a real human!)
                 </p>
               </div>
             </div>

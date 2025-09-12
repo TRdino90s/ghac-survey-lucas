@@ -360,7 +360,15 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
       {data.objectives.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <p>No objectives added yet.</p>
-          <p className="text-sm">Use the examples above or enter detailed objectives to get Warren-enhanced suggestions!</p>
+          <p className="text-sm mb-4">Use the examples above or enter detailed objectives to get Warren-enhanced suggestions!</p>
+          <div className="flex justify-center">
+            <button
+              onClick={() => addToArray('objectives', 'Working to better understand our stakeholder needs and priorities')}
+              className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600"
+            >
+              + Not sure yet - help me explore this
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -428,6 +436,20 @@ function AudienceStep({ data, addToArray, removeFromArray }: {
           </div>
         ))}
       </div>
+
+      {data.target_audience.length === 0 && (
+        <div className="text-center py-6 text-gray-500">
+          <p className="text-sm mb-4">No audience groups added yet.</p>
+          <div className="flex justify-center">
+            <button
+              onClick={() => addToArray('target_audience', 'General community members and stakeholders')}
+              className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600"
+            >
+              + Not sure yet - help me identify key groups
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -528,6 +550,20 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
           </div>
         ))}
       </div>
+
+      {data.pain_points.length === 0 && (
+        <div className="text-center py-6 text-gray-500">
+          <p className="text-sm mb-4">No challenges identified yet.</p>
+          <div className="flex justify-center">
+            <button
+              onClick={() => addToArray('pain_points', 'We need to improve our community engagement approach but are not sure where to start')}
+              className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600"
+            >
+              + Not sure yet - help me identify challenges
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -628,6 +664,20 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
           </div>
         ))}
       </div>
+
+      {data.success_metrics.length === 0 && (
+        <div className="text-center py-6 text-gray-500">
+          <p className="text-sm mb-4">No success metrics defined yet.</p>
+          <div className="flex justify-center">
+            <button
+              onClick={() => addToArray('success_metrics', 'Improved community participation and satisfaction with engagement processes')}
+              className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600"
+            >
+              + Not sure yet - help me define success measures
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

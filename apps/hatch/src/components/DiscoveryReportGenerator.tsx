@@ -222,10 +222,16 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
                       {pain.length > 60 ? `${pain.substring(0, 60)}...` : pain}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      Limiting stakeholder participation and reducing overall program effectiveness
+                      {index === 0 ? 'Creating barriers to meaningful participation and reducing community trust' : 
+                       index === 1 ? 'Limiting program reach and effectiveness across diverse stakeholder groups' :
+                       index === 2 ? 'Preventing authentic dialogue and collaborative decision-making processes' :
+                       'Reducing overall engagement quality and sustainable relationship building'}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      Address through targeted engagement strategies and inclusive communication approaches
+                      {index === 0 ? 'Implement inclusive outreach strategies with multiple engagement channels' :
+                       index === 1 ? 'Develop targeted communication approaches for specific audience segments' :
+                       index === 2 ? 'Create structured dialogue frameworks with clear feedback integration' :
+                       'Build systematic relationship management with ongoing touch points'}
                     </td>
                   </tr>
                 ))}
@@ -250,6 +256,84 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Engagement Strategy Framework */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Core Engagement Strategies</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h4 className="font-semibold text-gray-900 mb-3">Multi-Channel Communication</h4>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    Digital platforms for broad reach and accessibility
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    In-person forums for deep dialogue and relationship building
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    Hybrid approaches accommodating diverse participation preferences
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                <h4 className="font-semibold text-gray-900 mb-3">Inclusive Participation Design</h4>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    Language accessibility and cultural responsiveness
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    Multiple engagement formats for different comfort levels
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    Barrier removal for economic and scheduling constraints
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Implementation Methodology */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Implementation Methodology</h3>
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border border-green-200">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Discovery Phase</h4>
+                  <ul className="space-y-1 text-sm text-gray-700">
+                    <li>• Stakeholder mapping</li>
+                    <li>• Asset inventory</li>
+                    <li>• Historical context analysis</li>
+                    <li>• Communication preferences audit</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Design Phase</h4>
+                  <ul className="space-y-1 text-sm text-gray-700">
+                    <li>• Engagement framework development</li>
+                    <li>• Communication strategy creation</li>
+                    <li>• Success metrics definition</li>
+                    <li>• Feedback integration planning</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Implementation Phase</h4>
+                  <ul className="space-y-1 text-sm text-gray-700">
+                    <li>• Pilot program launch</li>
+                    <li>• Community response monitoring</li>
+                    <li>• Rapid iteration cycles</li>
+                    <li>• Full program deployment</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -304,7 +388,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
                 <ul className="space-y-3">
                   {successMetrics.quantitative.map((metric, index) => (
                     <li key={index} className="flex items-start text-sm text-gray-700">
-                      <span className="text-blue-600 mr-2">📊</span>
+                      <span className="text-blue-600 mr-2">•</span>
                       {metric}
                     </li>
                   ))}
@@ -318,7 +402,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
                 <ul className="space-y-3">
                   {successMetrics.qualitative.map((metric, index) => (
                     <li key={index} className="flex items-start text-sm text-gray-700">
-                      <span className="text-purple-600 mr-2">💭</span>
+                      <span className="text-purple-600 mr-2">•</span>
                       {metric}
                     </li>
                   ))}
@@ -339,7 +423,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
                 <ul className="space-y-2">
                   {insight.items.map((item, i) => (
                     <li key={i} className="flex items-start text-sm text-gray-700">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       {item}
                     </li>
                   ))}
@@ -383,7 +467,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
           <div className="bg-gradient-to-r from-blue-50 to-green-50 border-2 border-green-300 rounded-xl p-8 text-center">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                🎯 This is Your Strategic Preview
+                Strategic Implementation Preview
               </h2>
               <p className="text-lg text-gray-700 mb-6">
                 You've just experienced a glimpse of what's possible. This discovery outline represents the foundation 
@@ -395,29 +479,29 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
                 <div className="grid md:grid-cols-2 gap-4 text-left">
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Detailed stakeholder mapping & analysis
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Custom engagement strategy design
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Implementation roadmap with milestones
                     </li>
                   </ul>
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Success metrics & evaluation framework
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Resource requirements & budget planning
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Ongoing support & optimization plan
                     </li>
                   </ul>
@@ -426,11 +510,11 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-                  onClick={() => window.open('https://calendly.com/warren-team', '_blank')}
+                  onClick={() => window.location.href = 'mailto:hello@warren.tools?subject=Strategy Session Request&body=I completed the discovery tool and would like to schedule a strategy session to discuss implementation. Please let me know your availability.'}
                   className="px-8 py-4 text-white rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
                   style={{ backgroundColor: '#64B37A' }}
                 >
-                  Schedule Your Strategy Session
+                  Request Strategy Session
                 </button>
                 <button
                   onClick={() => window.location.href = 'mailto:hello@warren.tools?subject=Full Discovery SOW Request&body=I completed the discovery tool and would like to discuss a comprehensive Statement of Work.'}
