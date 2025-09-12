@@ -29,13 +29,26 @@ export default function AISuggestionEngine({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSuggestion, setShowSuggestion] = useState(false);
 
+  // Track AI enhancement usage for progressive value
+  const getUsageCount = () => {
+    const stored = localStorage.getItem('warren-ai-usage');
+    return stored ? parseInt(stored) : 0;
+  };
+
+  const incrementUsage = () => {
+    const current = getUsageCount();
+    localStorage.setItem('warren-ai-usage', (current + 1).toString());
+  };
+
   const generateExpansion = async () => {
     setIsGenerating(true);
     setShowSuggestion(true);
+    incrementUsage(); // Track usage for progressive value
     
     // Simulate AI processing time
     setTimeout(() => {
-      const expanded = expandResponse(userInput, step, industry, sector, projectContext);
+      const usageCount = getUsageCount();
+      const expanded = expandResponse(userInput, step, industry, sector, projectContext, usageCount);
       setExpandedResponse(expanded);
       setIsGenerating(false);
     }, 2000);
@@ -46,7 +59,8 @@ export default function AISuggestionEngine({
     currentStep: string,
     userIndustry: string,
     userSector: string,
-    context: typeof projectContext
+    context: typeof projectContext,
+    usageCount: number = 0
   ): string => {
     
     // Analyze the actual user input for key concepts and themes
@@ -78,6 +92,7 @@ export default function AISuggestionEngine({
         // Generic thoughtful expansion based on sector
         const sectorContext = {
           'campaigns': 'Effective political campaigns balance ambitious vision with practical implementation, ensuring constituent voices drive policy priorities rather than partisan talking points.',
+          'political': 'Public service excellence requires building authentic relationships with constituents through transparent communication, accessible participation opportunities, and demonstrable responsiveness to community priorities.',
           'educators': 'Educational transformation requires engaging all stakeholders - students, families, educators, and community partners - in collaborative decision-making processes.',
           'nonprofits': 'Sustainable nonprofit impact comes from centering the voices and experiences of the communities being served in all program design and evaluation.',
           'cities': 'Municipal effectiveness depends on creating accessible pathways for resident participation in local decision-making processes.'
@@ -115,6 +130,22 @@ export default function AISuggestionEngine({
       else {
         response = `${input}\n\nStrategic Measurement Enhancement:\nEffective metrics balance quantitative data with qualitative insights:\n\n• Process metrics - are we implementing as planned?\n• Outcome metrics - are we achieving intended results?\n• Impact metrics - what long-term change are we creating?\n• Learning metrics - how is our approach evolving based on community feedback?`;
       }
+    }
+    
+    // Progressive enhancement based on usage
+    if (response && usageCount > 1) {
+      // Add strategic depth for engaged users
+      response += `\n\nImplementation Considerations:\n• Phased rollout strategy to test and refine approaches\n• Resource allocation planning for sustainable execution\n• Stakeholder communication timeline and touchpoints`;
+      
+      if (usageCount > 2) {
+        // Add even more depth for highly engaged users
+        response += `\n• Risk mitigation strategies for potential engagement barriers\n• Success celebration and recognition frameworks\n• Continuous improvement methodology integration`;
+      }
+    }
+    
+    // Gentle gatekeeping for high usage
+    if (usageCount >= 4) {
+      response += `\n\nWarren Insight: You're clearly thinking deeply about this work. Consider scheduling a brief consultation to explore these frameworks in detail - many clients find a 15-minute conversation unlocks implementation strategies that save months of trial and error.`;
     }
     
     return response || input;

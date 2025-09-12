@@ -165,7 +165,8 @@ function ProjectBasicsStep({ data, updateData }: { data: DiscoveryData; updateDa
     { value: 'educators', label: 'Education (Schools, Districts, Universities)' },
     { value: 'nonprofits', label: 'Nonprofit Organizations' },
     { value: 'campaigns', label: 'Advocacy & Campaign Organizations' },
-    { value: 'cities', label: 'Municipal Government & Cities' }
+    { value: 'cities', label: 'Municipal Government & Cities' },
+    { value: 'political', label: 'Political Campaigns & Public Servants' }
   ];
 
   const industryOptions = [

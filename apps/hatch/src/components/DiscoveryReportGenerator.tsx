@@ -40,6 +40,11 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
           "Coalition building requires diverse community engagement strategies",
           "Message resonance varies significantly across demographic groups",
           "Policy change timeline must account for community education phases"
+        ],
+        political: [
+          "Building authentic constituent relationships beyond campaign cycles",
+          "Balancing diverse constituency priorities with practical governance constraints",
+          "Establishing transparent communication channels that build sustained public trust"
         ]
       };
 
