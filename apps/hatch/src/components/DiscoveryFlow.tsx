@@ -493,7 +493,7 @@ function ObjectivesStep({ data, addToArray, removeFromArray, effectiveSector }: 
           userInput={pendingInput}
           step="objectives"
           industry={data.industry}
-          sector={getEffectiveSector(data)}
+          sector={effectiveSector}
           projectContext={{
             client_name: data.client_name,
             project_title: data.project_title,
@@ -689,7 +689,7 @@ function PainPointsStep({ data, addToArray, removeFromArray, effectiveSector }: 
           userInput={pendingInput}
           step="pain_points"
           industry={data.industry}
-          sector={getEffectiveSector(data)}
+          sector={effectiveSector}
           projectContext={{
             client_name: data.client_name,
             project_title: data.project_title,
@@ -804,7 +804,7 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray, effectiveSector
           userInput={pendingInput}
           step="success_metrics"
           industry={data.industry}
-          sector={getEffectiveSector(data)}
+          sector={effectiveSector}
           projectContext={{
             client_name: data.client_name,
             project_title: data.project_title,

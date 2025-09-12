@@ -256,9 +256,57 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
           </div>
         </section>
 
+        {/* Communication Voice & Style */}
+        <section>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">3. Communication Voice & Style</h2>
+          
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-3">Voice Approach</h3>
+                <div className="bg-white p-4 rounded border">
+                  <div className="flex items-center mb-2">
+                    <div className="w-3 h-3 rounded-full bg-blue-600 mr-2"></div>
+                    <span className="font-medium text-gray-900 capitalize">
+                      {data.voice_type === 'personal' ? 'Personal Leadership Voice' : 'Organizational Brand Voice'}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {data.voice_type === 'personal' 
+                      ? 'Direct, authentic communication reflecting individual leadership style and personal connection with community stakeholders.'
+                      : 'Professional, consistent messaging that represents institutional values and organizational mission across all touchpoints.'}
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-3">Communication Style</h3>
+                <div className="bg-white p-4 rounded border">
+                  <div className="flex items-center mb-2">
+                    <div className="w-3 h-3 rounded-full bg-purple-600 mr-2"></div>
+                    <span className="font-medium text-gray-900">{data.voice_style}</span>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    This tone will guide all stakeholder communications, from initial outreach through ongoing relationship building and feedback collection.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {data.voice_description && (
+              <div className="mt-6 pt-6 border-t border-blue-200">
+                <h3 className="text-lg font-medium text-gray-900 mb-3">Voice Characteristics</h3>
+                <div className="bg-white p-4 rounded border">
+                  <p className="text-gray-700 leading-relaxed">{data.voice_description}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* Strategic Framework */}
         <section>
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">3. Strategic Implementation Framework</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">4. Strategic Implementation Framework</h2>
           
           {/* Audience Analysis */}
           <div className="mb-8">
@@ -356,7 +404,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
 
         {/* Implementation Timeline */}
         <section>
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">4. Implementation Timeline</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">5. Implementation Timeline</h2>
           
           {/* Timeline Visualization */}
           <div className="bg-gray-50 p-6 rounded-lg mb-6">
@@ -395,7 +443,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
 
         {/* Success Metrics */}
         <section>
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">5. Success Metrics & Evaluation Framework</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">6. Success Metrics & Evaluation Framework</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -430,7 +478,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
 
         {/* Strategic Recommendations */}
         <section>
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">6. Strategic Recommendations</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">7. Strategic Recommendations</h2>
           
           <div className="space-y-6">
             {insights.map((insight, index) => (
@@ -451,7 +499,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
 
         {/* Project Overview Summary */}
         <section>
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">7. Project Overview</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">8. Project Overview</h2>
           
           <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 p-8 rounded-lg">
             <div className="grid md:grid-cols-3 gap-8 text-center">
@@ -550,7 +598,7 @@ export default function DiscoveryReportGenerator({ data }: DiscoveryReportGenera
 
         {/* Implementation Support */}
         <section className="pb-12">
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">8. Ready to Implement?</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">9. Ready to Implement?</h2>
           
           <div className="bg-green-50 border border-green-200 rounded-lg p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Your Next Steps</h3>

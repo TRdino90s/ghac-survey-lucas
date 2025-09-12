@@ -107,7 +107,7 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
               
               {/* Preview Sample */}
               <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
-                <div className="text-xs text-green-700 font-medium mb-2">SAMPLE DELIVERABLE</div>
+                <div className="text-xs text-green-700 font-medium mb-2">DELIVERABLE UPON COMPLETION</div>
                 <div className="text-sm font-medium text-gray-900 mb-1">Strategic Implementation Framework</div>
                 <div className="text-xs text-gray-600 mb-3">Multi-channel communication strategies, inclusive participation design, and phased implementation methodology...</div>
                 <div className="flex items-center justify-between">
