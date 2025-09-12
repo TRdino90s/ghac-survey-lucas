@@ -42,7 +42,7 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
                 Community Engagement Discovery
               </h1>
               <p className="text-lg text-gray-600 mb-6">
-                Transform your stakeholder engagement strategy with our AI-powered discovery process. 
+                Transform your stakeholder engagement strategy with our streamlined discovery process. 
                 Get actionable insights and a custom Statement of Work in minutes.
               </p>
               <div className="flex items-center space-x-4 text-sm text-gray-500">
@@ -56,7 +56,7 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  AI-powered insights
+                  Strategic insights
                 </div>
                 <div className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
