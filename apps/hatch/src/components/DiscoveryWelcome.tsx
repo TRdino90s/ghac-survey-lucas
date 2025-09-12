@@ -45,6 +45,11 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
                 Transform your stakeholder engagement strategy with our streamlined discovery process. 
                 Get actionable insights and a custom Statement of Work in minutes.
               </p>
+              <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium text-blue-900">Enterprise-grade security:</span> Unlike generic survey tools, Warren is purpose-built for sensitive community data with SOC 2 equivalent controls and privacy-by-design architecture.
+                </p>
+              </div>
               <div className="flex items-center space-x-4 text-sm text-gray-500">
                 <div className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -172,7 +177,7 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
                     </button>
                     {' '}and data protection terms.
                     <div className="text-xs text-gray-500 mt-1">
-                      GDPR, COPPA, FERPA compliant • SOC 2 security • No data sales
+                      <span className="font-medium text-blue-700">Full compliance:</span> GDPR, COPPA, FERPA • SOC 2 security • Zero data sales • Export your data anytime
                     </div>
                   </label>
                 </div>
@@ -198,18 +203,24 @@ export default function DiscoveryWelcome({ onStart }: DiscoveryWelcomeProps) {
             
             {/* Trust Indicators */}
             <div className="mt-6 text-center">
-              <div className="flex items-center justify-center space-x-6 text-xs text-gray-500">
+              <div className="flex items-center justify-center space-x-4 text-xs text-gray-600">
                 <div className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Secure
+                  256-bit encryption
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Zero data sales
                 </div>
                 <div className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Trusted by 100+ organizations
+                  SOC 2 controls
                 </div>
               </div>
             </div>
