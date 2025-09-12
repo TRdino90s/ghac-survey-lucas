@@ -15,6 +15,9 @@ interface DiscoveryData {
   industry: string;
   sector: 'educators' | 'nonprofits' | 'campaigns' | 'cities' | 'political' | 'other' | '';
   custom_sector: string;
+  voice_type: 'personal' | 'organizational' | '';
+  voice_style: string;
+  voice_description: string;
   objectives: string[];
   target_audience: string[];
   pain_points: string[];
@@ -38,6 +41,9 @@ export default function DiscoveryFlow() {
     industry: '',
     sector: '',
     custom_sector: '',
+    voice_type: '',
+    voice_style: '',
+    voice_description: '',
     objectives: [],
     target_audience: [],
     pain_points: [],
@@ -47,7 +53,7 @@ export default function DiscoveryFlow() {
     discovery_notes: ''
   });
 
-  const totalSteps = 7;
+  const totalSteps = 8;
   const progressPercentage = (currentStep / totalSteps) * 100;
 
   const updateData = (field: keyof DiscoveryData, value: any) => {
@@ -93,16 +99,18 @@ export default function DiscoveryFlow() {
       case 1:
         return <ProjectBasicsStep data={discoveryData} updateData={updateData} />;
       case 2:
-        return <ObjectivesStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} />;
+        return <VoiceStyleStep data={discoveryData} updateData={updateData} />;
       case 3:
-        return <AudienceStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} />;
+        return <ObjectivesStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} effectiveSector={getEffectiveSector(discoveryData)} />;
       case 4:
-        return <PainPointsStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} />;
+        return <AudienceStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} effectiveSector={getEffectiveSector(discoveryData)} />;
       case 5:
-        return <SuccessMetricsStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} />;
+        return <PainPointsStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} effectiveSector={getEffectiveSector(discoveryData)} />;
       case 6:
-        return <TimelineBudgetStep data={discoveryData} updateData={updateData} />;
+        return <SuccessMetricsStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} effectiveSector={getEffectiveSector(discoveryData)} />;
       case 7:
+        return <TimelineBudgetStep data={discoveryData} updateData={updateData} />;
+      case 8:
         return <ReviewStep data={discoveryData} onExport={handleExport} onGenerateReport={handleGenerateReport} />;
       default:
         return null;
@@ -294,10 +302,130 @@ function ProjectBasicsStep({ data, updateData }: { data: DiscoveryData; updateDa
   );
 }
 
-function ObjectivesStep({ data, addToArray, removeFromArray }: {
+function VoiceStyleStep({ data, updateData }: { data: DiscoveryData; updateData: (field: keyof DiscoveryData, value: any) => void }) {
+  const personalStyles = [
+    { value: 'collaborative-consensus', label: 'Collaborative & consensus-building' },
+    { value: 'direct-action', label: 'Direct & action-oriented' },
+    { value: 'warm-relationship', label: 'Warm & relationship-focused' },
+    { value: 'professional-expertise', label: 'Professional & expertise-driven' }
+  ];
+
+  const organizationalStyles = [
+    { value: 'collaborative-inclusive', label: 'Collaborative & inclusive' },
+    { value: 'professional-informative', label: 'Professional & informative' },
+    { value: 'warm-community', label: 'Warm & community-focused' },
+    { value: 'direct-mission', label: 'Direct & mission-driven' }
+  ];
+
+  const currentStyles = data.voice_type === 'personal' ? personalStyles : organizationalStyles;
+
+  return (
+    <div className="space-y-6">
+      <h3 className="font-semibold text-gray-900 mb-4">Communication Voice & Style</h3>
+      <p className="text-gray-600 mb-6">
+        Community engagement works best with a consistent, authentic voice. Who or what will be the voice of this engagement?
+      </p>
+      
+      {/* Voice Type Selection */}
+      <div className="space-y-4">
+        <label className="block text-sm font-medium text-gray-700 mb-3">Voice Type</label>
+        <div className="space-y-3">
+          <label className="flex items-start cursor-pointer p-3 rounded-lg border hover:bg-gray-50">
+            <input
+              type="radio"
+              name="voice_type"
+              value="personal"
+              checked={data.voice_type === 'personal'}
+              onChange={(e) => updateData('voice_type', e.target.value)}
+              className="mt-1 mr-3"
+              style={{ accentColor: '#64B37A' }}
+            />
+            <div>
+              <div className="font-medium text-gray-900">Personal leadership voice</div>
+              <div className="text-sm text-gray-600">Candidate, executive, principal, or individual leader</div>
+            </div>
+          </label>
+          
+          <label className="flex items-start cursor-pointer p-3 rounded-lg border hover:bg-gray-50">
+            <input
+              type="radio"
+              name="voice_type"
+              value="organizational"
+              checked={data.voice_type === 'organizational'}
+              onChange={(e) => updateData('voice_type', e.target.value)}
+              className="mt-1 mr-3"
+              style={{ accentColor: '#64B37A' }}
+            />
+            <div>
+              <div className="font-medium text-gray-900">Organizational/brand voice</div>
+              <div className="text-sm text-gray-600">Campaign, nonprofit, institution, or company brand</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {/* Style Selection - appears after voice type is selected */}
+      {data.voice_type && (
+        <div className="space-y-4">
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            {data.voice_type === 'personal' ? 'How would you describe your communication style?' : 'How should your organization sound to the community?'}
+          </label>
+          <div className="space-y-2">
+            {currentStyles.map((style) => (
+              <label key={style.value} className="flex items-center cursor-pointer p-2 hover:bg-gray-50 rounded">
+                <input
+                  type="radio"
+                  name="voice_style"
+                  value={style.value}
+                  checked={data.voice_style === style.value}
+                  onChange={(e) => updateData('voice_style', e.target.value)}
+                  className="mr-3"
+                  style={{ accentColor: '#64B37A' }}
+                />
+                <span className="text-sm text-gray-700">{style.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Optional Description with AI Enhancement */}
+      {data.voice_style && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Any other qualities that define this voice? (Optional)
+          </label>
+          <textarea
+            value={data.voice_description}
+            onChange={(e) => updateData('voice_description', e.target.value)}
+            className="warren-input h-24"
+            placeholder="Additional voice characteristics, tone preferences, or communication style notes... (detailed entries get Warren enhancement)"
+          />
+          
+          {data.voice_description.length > 15 && (
+            <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-green-700">Warren Enhancement Available</span>
+              </div>
+              <p className="text-xs text-green-600 mt-1">
+                Your voice description can be enhanced with strategic communication frameworks and tone guidance.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ObjectivesStep({ data, addToArray, removeFromArray, effectiveSector }: {
   data: DiscoveryData;
   addToArray: (field: keyof DiscoveryData, value: string) => void;
   removeFromArray: (field: keyof DiscoveryData, index: number) => void;
+  effectiveSector: string;
 }) {
   const [inputValue, setInputValue] = useState('');
   const [pendingInput, setPendingInput] = useState('');
@@ -339,7 +467,7 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: getEffectiveSector(data),
+          sector: effectiveSector,
           industry: data.industry
         }}
       />
@@ -410,10 +538,11 @@ function ObjectivesStep({ data, addToArray, removeFromArray }: {
   );
 }
 
-function AudienceStep({ data, addToArray, removeFromArray }: {
+function AudienceStep({ data, addToArray, removeFromArray, effectiveSector }: {
   data: DiscoveryData;
   addToArray: (field: keyof DiscoveryData, value: string) => void;
   removeFromArray: (field: keyof DiscoveryData, index: number) => void;
+  effectiveSector: string;
 }) {
   const [inputValue, setInputValue] = useState('');
 
@@ -437,7 +566,7 @@ function AudienceStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: getEffectiveSector(data),
+          sector: effectiveSector,
           industry: data.industry
         }}
       />
@@ -489,10 +618,11 @@ function AudienceStep({ data, addToArray, removeFromArray }: {
   );
 }
 
-function PainPointsStep({ data, addToArray, removeFromArray }: {
+function PainPointsStep({ data, addToArray, removeFromArray, effectiveSector }: {
   data: DiscoveryData;
   addToArray: (field: keyof DiscoveryData, value: string) => void;
   removeFromArray: (field: keyof DiscoveryData, index: number) => void;
+  effectiveSector: string;
 }) {
   const [inputValue, setInputValue] = useState('');
   const [pendingInput, setPendingInput] = useState('');
@@ -533,7 +663,7 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: getEffectiveSector(data),
+          sector: effectiveSector,
           industry: data.industry
         }}
       />
@@ -603,10 +733,11 @@ function PainPointsStep({ data, addToArray, removeFromArray }: {
   );
 }
 
-function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
+function SuccessMetricsStep({ data, addToArray, removeFromArray, effectiveSector }: {
   data: DiscoveryData;
   addToArray: (field: keyof DiscoveryData, value: string) => void;
   removeFromArray: (field: keyof DiscoveryData, index: number) => void;
+  effectiveSector: string;
 }) {
   const [inputValue, setInputValue] = useState('');
   const [pendingInput, setPendingInput] = useState('');
@@ -647,7 +778,7 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: getEffectiveSector(data),
+          sector: effectiveSector,
           industry: data.industry
         }}
       />
@@ -746,7 +877,7 @@ function TimelineBudgetStep({ data, updateData }: {
         projectContext={{
           client_name: data.client_name,
           project_title: data.project_title,
-          sector: getEffectiveSector(data),
+          sector: effectiveSector,
           industry: data.industry
         }}
       />

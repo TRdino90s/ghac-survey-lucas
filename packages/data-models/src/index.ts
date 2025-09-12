@@ -28,6 +28,9 @@ export interface DiscoveryOutline {
   industry: string;
   sector: string;
   custom_sector: string;
+  voice_type: string;
+  voice_style: string;
+  voice_description: string;
   objectives: string[];
   target_audience: string[];
   pain_points: string[];
