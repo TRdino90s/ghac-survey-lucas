@@ -109,7 +109,7 @@ export default function DiscoveryFlow() {
       case 6:
         return <SuccessMetricsStep data={discoveryData} addToArray={addToArray} removeFromArray={removeFromArray} effectiveSector={getEffectiveSector(discoveryData)} />;
       case 7:
-        return <TimelineBudgetStep data={discoveryData} updateData={updateData} />;
+        return <TimelineBudgetStep data={discoveryData} updateData={updateData} effectiveSector={getEffectiveSector(discoveryData)} />;
       case 8:
         return <ReviewStep data={discoveryData} onExport={handleExport} onGenerateReport={handleGenerateReport} />;
       default:
@@ -848,9 +848,10 @@ function SuccessMetricsStep({ data, addToArray, removeFromArray, effectiveSector
   );
 }
 
-function TimelineBudgetStep({ data, updateData }: {
+function TimelineBudgetStep({ data, updateData, effectiveSector }: {
   data: DiscoveryData;
   updateData: (field: keyof DiscoveryData, value: any) => void;
+  effectiveSector: string;
 }) {
   const timelineOptions = [
     '1-2 months',
