@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import AppHeader from '@/components/ui/app-header';
 import PrimaryButton from '@/components/ui/primary-button';
 
 export const dynamic = "force-dynamic";
@@ -35,7 +36,8 @@ export default function ReportsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F7F7F6] text-[#0E2A23] p-6 space-y-8">
+    <section className="p-6 space-y-6">
+      <AppHeader title="Reports" subtitle="Export data, schedule reports, and manage integrations" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card title="Data Export">
@@ -111,14 +113,27 @@ export default function ReportsPage() {
         </Card>
 
         <Card title="Data Security & Compliance">
-          <ul className="text-sm space-y-2 text-gray-700">
-            <li>• SOC 2 Type II controls</li>
-            <li>• GDPR‑compliant processing</li>
-            <li>• 256‑bit encryption at rest & TLS in transit</li>
-            <li>• Regular third‑party audits</li>
-          </ul>
+          <div className="space-y-4">
+            <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">Enterprise-Grade Security</h4>
+              <p className="text-xs text-blue-800">
+                Warren follows SOC 2 equivalent controls and privacy-by-design architecture for sensitive community data protection.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h5 className="text-sm font-medium text-gray-900">Security & Privacy Practices</h5>
+              <ul className="text-sm space-y-1 text-gray-700">
+                <li>• 256-bit encryption in transit and at rest</li>
+                <li>• Zero data sales • Never sold to third parties</li>
+                <li>• SOC 2 equivalent security controls</li>
+                <li>• GDPR, COPPA, FERPA compliant processing</li>
+                <li>• Export your data anytime</li>
+                <li>• Privacy-by-design architecture</li>
+              </ul>
+            </div>
+          </div>
         </Card>
       </div>
-    </main>
+    </section>
   );
 }

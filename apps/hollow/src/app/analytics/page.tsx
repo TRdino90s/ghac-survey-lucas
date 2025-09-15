@@ -24,6 +24,24 @@ type QItem = {
 
 type Narrative = { question: string; text: string; completed_at?: string };
 
+type ThemeData = {
+  patterns: string[];
+  color: string;
+  responses: string[];
+};
+
+type ThemeAnalysis = {
+  themes: Record<string, ThemeData>;
+  feedback: Record<string, ThemeData>;
+  insights: {
+    totalResponses: number;
+    connectionTypes: { professional: number; amateur: number; audience: number };
+    artForms: { music: number; theater: number; visual: number; dance: number; literature: number; digital: number };
+    topThemes: Array<{ name: string; count: number; percentage: number; color: string }>;
+    topFeedback: Array<{ name: string; count: number; percentage: number; color: string }>;
+  };
+};
+
 function Card({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border bg-white shadow-sm">
@@ -53,6 +71,7 @@ export default function SurveyInsightsPage() {
   const [m, setM] = useState<Metrics | null>(null);
   const [q, setQ] = useState<QItem[]>([]);
   const [narr, setNarr] = useState<Narrative[]>([]);
+  const [themeAnalysis, setThemeAnalysis] = useState<ThemeAnalysis | null>(null);
   const [query, setQuery] = useState('');
   const [activeTheme, setActiveTheme] = useState<string | null>(null);
   const [showAdditionalRecs, setShowAdditionalRecs] = useState(false);
@@ -67,6 +86,7 @@ export default function SurveyInsightsPage() {
       .catch(() => {});
     fetch('/api/question-breakdown').then((r) => r.json()).then((res) => setQ(res.questions || [])).catch(() => {});
     fetch('/api/narratives').then((r) => r.json()).then((res) => setNarr(res.narratives || [])).catch(() => {});
+    fetch('/api/narrative-themes').then((r) => r.json()).then((res) => setThemeAnalysis(res)).catch(() => {});
   }, []);
 
   const fmtPct = (n?: number | null) => (n == null ? '—' : `${(typeof n === 'number' ? n : 0).toFixed(1)}%`);
@@ -245,7 +265,154 @@ export default function SurveyInsightsPage() {
           )}
 
           {tab === 'stories' && (
-            <div className="space-y-4">
+            <div className="space-y-6">
+              
+              {/* Thematic Analysis Section */}
+              {themeAnalysis && themeAnalysis.insights && themeAnalysis.insights.totalResponses > 0 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Thematic Analysis</h3>
+                    <span className="text-sm text-gray-500">{themeAnalysis.insights.totalResponses} responses analyzed</span>
+                  </div>
+
+                  {/* Key Insights Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card title="Personal Connection Types">
+                      <div className="space-y-2">
+                        {Object.entries(themeAnalysis.insights.connectionTypes).map(([type, count]) => (
+                          <div key={type} className="flex items-center justify-between">
+                            <span className="text-sm text-gray-700 capitalize">{type}</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="h-2 rounded-full bg-[#64B37A]" 
+                                  style={{ width: `${(count / themeAnalysis.insights.totalResponses) * 100}%` }}
+                                />
+                              </div>
+                              <span className="text-xs font-medium text-gray-600">
+                                {Math.round((count / themeAnalysis.insights.totalResponses) * 100)}%
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+
+                    <Card title="Most Mentioned Art Forms">
+                      <div className="space-y-2">
+                        {Object.entries(themeAnalysis.insights.artForms)
+                          .sort(([,a], [,b]) => b - a)
+                          .slice(0, 4)
+                          .map(([form, count]) => (
+                          <div key={form} className="flex items-center justify-between">
+                            <span className="text-sm text-gray-700 capitalize">{form}</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="h-2 rounded-full bg-gray-400" 
+                                  style={{ width: `${(count / Math.max(...Object.values(themeAnalysis.insights.artForms))) * 100}%` }}
+                                />
+                              </div>
+                              <span className="text-xs font-medium text-gray-600">{count}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+
+                    <Card title="Top Impact Themes">
+                      <div className="space-y-2">
+                        {themeAnalysis.insights.topThemes.slice(0, 4).map((theme) => (
+                          <div key={theme.name} className="flex items-center justify-between">
+                            <span className="text-sm text-gray-700 truncate" title={theme.name}>
+                              {theme.name.length > 20 ? theme.name.substring(0, 20) + '...' : theme.name}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="h-2 rounded-full bg-[#64B37A]" 
+                                  style={{ width: `${theme.percentage}%` }}
+                                />
+                              </div>
+                              <span className="text-xs font-medium text-gray-600">{theme.percentage}%</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Detailed Theme Breakdown */}
+                  <Card title="Community Impact Themes">
+                    <div className="space-y-4">
+                      {themeAnalysis.insights.topThemes.map((theme, idx) => (
+                        <div key={theme.name} className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h5 className="font-medium text-gray-900">{theme.name}</h5>
+                            <span className="text-sm text-gray-500">{theme.count} responses</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-32 text-sm text-gray-700">{theme.percentage}%</div>
+                            <div className="flex-1">
+                              <div className="h-6 rounded bg-gray-100">
+                                <div
+                                  className="h-6 rounded flex items-center justify-end pr-2"
+                                  style={{
+                                    width: `${theme.percentage}%`,
+                                    background: idx === 0 
+                                      ? 'linear-gradient(90deg, #64B37A 0%, #2F6D49 100%)'
+                                      : idx === 1
+                                      ? '#86C99B'
+                                      : idx === 2  
+                                      ? '#A9D8B7'
+                                      : '#CDEBD8'
+                                  }}
+                                >
+                                  <span className="text-xs font-medium text-white">{theme.percentage}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-600">
+                            {theme.name === 'Personal Identity & Creative Expression' && 'Arts serve as fundamental identity markers and creative outlets'}
+                            {theme.name === 'Community Building & Connection' && 'Arts create bridges between diverse communities and foster relationships'}
+                            {theme.name === 'Emotional & Spiritual Impact' && 'Arts provide deep emotional experiences and personal transformation'}
+                            {theme.name === 'Professional Development' && 'Arts as career foundation and professional growth'}
+                            {theme.name === 'Economic Impact' && 'Arts as economic driver and business development'}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+
+                  {/* Critical Feedback Themes */}
+                  <Card title="Community Feedback Priorities">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {themeAnalysis.insights.topFeedback.map((feedback) => (
+                        <div key={feedback.name} className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <h5 className="font-medium text-gray-900 text-sm">{feedback.name}</h5>
+                            <span className="text-xs text-gray-500">{feedback.count} mentions</span>
+                          </div>
+                          <div className="h-2 bg-gray-200 rounded-full">
+                            <div 
+                              className="h-2 rounded-full bg-gray-400" 
+                              style={{ width: `${feedback.percentage}%` }}
+                            />
+                          </div>
+                          <p className="text-xs text-gray-600">
+                            {feedback.name === 'GHAC Operations & Communication' && 'Transparency, inclusivity, branding awareness, and communication improvements'}
+                            {feedback.name === 'Artist Support & Development' && 'Fair compensation, professional development, and networking opportunities'}
+                            {feedback.name === 'Community Outreach & Inclusion' && 'Geographic equity, demographic inclusion, and collaborative approaches'}
+                            {feedback.name === 'Infrastructure & Programming' && 'Venues, live music spaces, public art, and cross-disciplinary support'}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+              )}
+
               <div className="rounded border p-3 bg-gray-50">
                 <div className="text-xs text-gray-600 mb-2">Featured Audio Story</div>
                 <audio controls className="w-full">
