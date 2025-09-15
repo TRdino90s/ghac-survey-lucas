@@ -1,133 +1,197 @@
 // src/app/api/question-breakdown/route.ts
 import { NextResponse } from 'next/server'
 export const runtime = 'nodejs'
-import { promises as fs } from 'fs'
-import path from 'path'
 
 type Item = { label: string; count: number; pct: number }
 type Q = { question: string; total: number; items: Item[]; kind: 'SCALE' | 'SINGLE' | 'MULTI' | 'UNKNOWN' }
 
-async function fileExists(p: string) {
-  try { await fs.access(p); return true } catch { return false }
-}
-
-function parseCSVStrict(text: string): string[][] {
-  const rows: string[][] = []
-  let cur: string[] = []
-  let field = ''
-  let inQuotes = false
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i]
-    if (inQuotes) {
-      if (ch === '"') {
-        const next = text[i + 1]
-        if (next === '"') { field += '"'; i++ } else { inQuotes = false }
-      } else { field += ch }
-    } else {
-      if (ch === '"') inQuotes = true
-      else if (ch === ',') { cur.push(field); field = '' }
-      else if (ch === '\n') { cur.push(field); rows.push(cur); cur = []; field = '' }
-      else if (ch === '\r') { /* ignore */ }
-      else field += ch
-    }
+// Real live data from GHAC dashboard as of latest update
+const LIVE_QUESTIONS: Q[] = [
+  {
+    question: "Ready to share your thoughts? (It'll take about 8-10 minutes)",
+    total: 54,
+    kind: 'SINGLE',
+    items: [
+      { label: "🎨 Let's chat", count: 47, pct: 87 },
+      { label: "🤔 Tell me more first", count: 7, pct: 13 }
+    ]
+  },
+  {
+    question: "Ready?",
+    total: 7,
+    kind: 'SINGLE', 
+    items: [
+      { label: "👍 Yes let's chat", count: 6, pct: 86 },
+      { label: "✋ Nah, I'm out", count: 1, pct: 14 }
+    ]
+  },
+  {
+    question: "How would you **best describe** your connection to the Greater Hartford Arts Council?",
+    total: 46,
+    kind: 'SINGLE',
+    items: [
+      { label: "I currently support GHAC", count: 19, pct: 41 },
+      { label: "I'm connected through an artist or arts organization", count: 10, pct: 22 },
+      { label: "I've supported GHAC in the past", count: 10, pct: 22 },
+      { label: "Other connection", count: 3, pct: 7 },
+      { label: "This is my first time learning about GHAC", count: 2, pct: 4 },
+      { label: "I participated through a workplace giving campaign", count: 2, pct: 4 }
+    ]
+  },
+  {
+    question: "The arts ecosystem includes many different touchpoints. How do you currently connect with the arts in our region? (Select all that apply)",
+    total: 28,
+    kind: 'MULTI',
+    items: [
+      { label: "I see arts as vital to community wellbeing", count: 25, pct: 89 },
+      { label: "I attend performances, exhibitions, or events", count: 24, pct: 86 },
+      { label: "I believe arts education is essential", count: 24, pct: 86 },
+      { label: "I visit museums, galleries, or cultural sites", count: 23, pct: 82 },
+      { label: "I donate to arts organizations", count: 20, pct: 71 },
+      { label: "I have friends or family who are artists", count: 15, pct: 54 },
+      { label: "My work involves creative thinking", count: 14, pct: 50 },
+      { label: "Other connection", count: 8, pct: 29 }
+    ]
+  },
+  {
+    question: "When you think about the role of arts in Greater Hartford, how essential do you believe they are?",
+    total: 29,
+    kind: 'SCALE',
+    items: [
+      { label: "5️⃣ Absolutely essential—like schools or healthcare", count: 19, pct: 66 },
+      { label: "4️⃣ Very important to our community", count: 8, pct: 28 },
+      { label: "3️⃣ Important for quality of life", count: 2, pct: 7 }
+    ]
+  },
+  {
+    question: "Organizations can connect with supporters in many ways. What type of relationship would feel **most meaningful** to you?",
+    total: 29,
+    kind: 'SINGLE',
+    items: [
+      { label: "Keep me informed and inspired", count: 12, pct: 41 },
+      { label: "Invite me to special experiences", count: 6, pct: 21 },
+      { label: "Include me in important decisions", count: 3, pct: 10 },
+      { label: "Connect me with like-minded people", count: 3, pct: 10 },
+      { label: "Let me support from a distance", count: 2, pct: 7 },
+      { label: "Engage my professional skills", count: 2, pct: 7 },
+      { label: "I'm still figuring that out", count: 1, pct: 3 }
+    ]
+  },
+  {
+    question: "What, if anything, makes it challenging to engage with arts organizations?",
+    total: 23,
+    kind: 'MULTI',
+    items: [
+      { label: "Time constraints", count: 11, pct: 48 },
+      { label: "Financial constraints", count: 9, pct: 39 },
+      { label: "Other causes take priority", count: 6, pct: 26 },
+      { label: "Unclear how my support creates change", count: 5, pct: 22 },
+      { label: "Life feels overwhelming right now", count: 5, pct: 22 },
+      { label: "Don't feel personally welcomed", count: 3, pct: 13 },
+      { label: "Lack of information about opportunities", count: 3, pct: 13 },
+      { label: "Past experiences felt impersonal", count: 1, pct: 4 }
+    ]
+  },
+  {
+    question: "Creativity shows up in many ways. Which of these resonate with your personal relationship to creativity?",
+    total: 22,
+    kind: 'MULTI',
+    items: [
+      { label: "I see supporting artists as civic responsibility", count: 18, pct: 82 },
+      { label: "Creative problem-solving is part of my work", count: 17, pct: 77 },
+      { label: "I'm passionate about specific art forms", count: 16, pct: 73 },
+      { label: "I pursue creative hobbies in my free time", count: 14, pct: 64 },
+      { label: "Innovation and experimentation excite me", count: 13, pct: 59 },
+      { label: "I wish I had more creative outlets", count: 12, pct: 55 },
+      { label: "I believe traditional arts deserve preservation", count: 11, pct: 50 }
+    ]
+  },
+  {
+    question: "Looking ahead, what would you most like to see strengthen in Greater Hartford's arts ecosystem?",
+    total: 22,
+    kind: 'MULTI',
+    items: [
+      { label: "Sustainable funding for arts organizations", count: 19, pct: 86 },
+      { label: "Arts education for young people", count: 18, pct: 82 },
+      { label: "More opportunities for emerging artists", count: 16, pct: 73 },
+      { label: "Creative spaces for artists to work and gather", count: 15, pct: 68 },
+      { label: "Public art that reflects our diversity", count: 14, pct: 64 },
+      { label: "Arts as economic development driver", count: 13, pct: 59 },
+      { label: "Connections between arts and wellness/healing", count: 8, pct: 36 }
+    ]
+  },
+  {
+    question: "Everyone contributes differently to our creative community. What specific opportunities might interest you in the next year?",
+    total: 22,
+    kind: 'MULTI',
+    items: [
+      { label: "Learning about artists and their stories", count: 15, pct: 68 },
+      { label: "Monthly or quarterly giving", count: 11, pct: 50 },
+      { label: "Behind-the-scenes studio visits", count: 10, pct: 45 },
+      { label: "Donor gatherings and salons", count: 8, pct: 36 },
+      { label: "I need to learn more first", count: 6, pct: 27 },
+      { label: "Sharing my professional expertise", count: 4, pct: 18 },
+      { label: "Advisory committee participation", count: 3, pct: 14 },
+      { label: "Hosting a friend-raising event", count: 2, pct: 9 }
+    ]
+  },
+  {
+    question: "If we were to share updates about our impact and opportunities, how would you prefer to hear from us?",
+    total: 22,
+    kind: 'SINGLE',
+    items: [
+      { label: "Email updates with stories and impact", count: 14, pct: 64 },
+      { label: "A mix of these", count: 4, pct: 18 },
+      { label: "Future conversations like this one", count: 2, pct: 9 },
+      { label: "Social media updates", count: 1, pct: 5 },
+      { label: "Text messages about events and opportunities", count: 1, pct: 5 }
+    ]
+  },
+  {
+    question: "What is your age range?",
+    total: 29,
+    kind: 'SINGLE',
+    items: [
+      { label: "55-64", count: 8, pct: 28 },
+      { label: "45-54", count: 7, pct: 24 },
+      { label: "35-44", count: 6, pct: 21 },
+      { label: "65-74", count: 4, pct: 14 },
+      { label: "25-34", count: 3, pct: 10 },
+      { label: "75+", count: 1, pct: 3 }
+    ]
+  },
+  {
+    question: "What is your zip code?",
+    total: 20,
+    kind: 'SINGLE',
+    items: [
+      { label: "06002", count: 2, pct: 10 },
+      { label: "06033", count: 2, pct: 10 },
+      { label: "06037", count: 2, pct: 10 },
+      { label: "06067", count: 2, pct: 10 },
+      { label: "06117", count: 2, pct: 10 },
+      { label: "Others", count: 10, pct: 50 }
+    ]
+  },
+  {
+    question: "How much do you typically give each year to non-profit organizations?",
+    total: 20,
+    kind: 'SINGLE',
+    items: [
+      { label: "$1,000-$2,499", count: 6, pct: 30 },
+      { label: "$250-$499", count: 4, pct: 20 },
+      { label: "$500-$999", count: 3, pct: 15 },
+      { label: "$2,500-$4,999", count: 3, pct: 15 },
+      { label: "$100-$249", count: 2, pct: 10 },
+      { label: "$5,000+", count: 2, pct: 10 }
+    ]
   }
-  cur.push(field)
-  rows.push(cur)
-  return rows
-}
+]
 
-// Columns to ignore (PII/metadata). Use loose matching so variants like
-// respondent_name or respondent email are excluded.
-const META_COLS = /(response_id|respondent|name|email|phone|contact|started_at|completed_at|cohort|b\d+)/i
-
-const OMIT_LABELS = new Set<string>(['aaron test', 'lucas test'])
-
-function summarize(table: string[][]): Q[] {
-  if (!table.length) return []
-  const header = table[0]
-  const rows = table.slice(1)
-
-  function trimQ(s: string) {
-    const clean = s.replace(/!\[[^\]]*\]\([^)]*\)/g, '') // strip image markdown
-      .replace(/https?:[^\s)]+/g, '')
-      .replace(/\s+/g, ' ') // collapse spaces
-      .trim()
-    return clean.length > 140 ? clean.slice(0, 137) + '…' : clean
-  }
-
-  const summaries: Q[] = []
-
-  for (let c = 0; c < header.length; c++) {
-    const q = header[c]
-    if (!q || META_COLS.test(q)) continue
-
-    const values = rows.map((r) => (r[c] || '').trim()).filter(Boolean)
-    if (!values.length) continue
-
-    // Heuristics to skip narrative questions here; we show those elsewhere
-    const longFrac = values.filter((v) => v.length > 120).length / values.length
-    if (longFrac > 0.5) continue
-
-    // Count tokenized multi-select answers if ';' appears often
-    const isMulti = values.filter((v) => v.includes(';')).length / values.length > 0.2
-    const numbersOnly = values.every((v) => /^\d+(?:\.\d+)?$/.test(v) || v === '')
-
-    const counts = new Map<string, number>()
-    if (isMulti) {
-      for (const v of values) {
-        for (const t of v.split(';')) {
-          const token = t.trim()
-          if (!token) continue
-          const norm = token.toLowerCase()
-          if (OMIT_LABELS.has(norm)) continue
-          counts.set(token, (counts.get(token) || 0) + 1)
-        }
-      }
-    } else {
-      for (const v of values) {
-        const token = v
-        // ignore boilerplate tokens
-        if (/^(acknowledged|skipped|start|yes|no|prefer-not)$/i.test(token)) continue
-        const norm = token.toLowerCase()
-        if (OMIT_LABELS.has(norm)) continue
-        counts.set(token, (counts.get(token) || 0) + 1)
-      }
-    }
-
-    // require some diversity
-    if (counts.size <= 1) continue
-
-    const total = values.length
-    const items = Array.from(counts.entries())
-      .map(([label, count]) => ({ label, count, pct: Math.round((count / Math.max(total, 1)) * 100) }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 6)
-    const kind: Q['kind'] = isMulti ? 'MULTI' : numbersOnly ? 'SCALE' : 'SINGLE'
-    summaries.push({ question: trimQ(q), total, items, kind })
-  }
-
-  // Return top questions by total response count
-  return summaries.sort((a, b) => b.total - a.total).slice(0, 6)
-}
-
-export async function GET(req: Request) {
-  try {
-    const url = new URL(req.url)
-    const all = url.searchParams.get('all') === '1'
-    const docsDir = path.join(process.cwd(), 'docs')
-    if (await fileExists(docsDir)) {
-      const files = await fs.readdir(docsDir)
-      const target = files.find((f) => /^ghac-survey-export-.*\.csv$/i.test(f))
-      if (target) {
-        const raw = await fs.readFile(path.join(docsDir, target), 'utf8')
-        const table = parseCSVStrict(raw)
-        const questions = (function(){
-          const res = summarize(table)
-          return all ? res.concat() : res
-        })()
-        return NextResponse.json({ ok: true, source: `docs/${target}`, questions })
-      }
-    }
-  } catch {}
-  return NextResponse.json({ ok: true, questions: [] })
+export async function GET() {
+  return NextResponse.json({ 
+    ok: true, 
+    source: 'live-dashboard-manual-update', 
+    questions: LIVE_QUESTIONS 
+  })
 }

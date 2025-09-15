@@ -41,8 +41,9 @@ export async function GET() {
     if (await fileExists(docsDir)) {
       const files = await fs.readdir(docsDir)
       const vaFiles = files.filter((f) => /^videoask-text-entries.*\.csv$/i.test(f))
+      const narrativeFiles = files.filter((f) => /^ghac-narrative-responses.*\.csv$/i.test(f))
       const sources: { name: string; table: string[][] }[] = []
-      for (const f of vaFiles) {
+      for (const f of [...narrativeFiles, ...vaFiles]) {
         const raw = await fs.readFile(path.join(docsDir, f), 'utf8')
         sources.push({ name: `docs/${f}`, table: parseCSVStrict(raw) })
       }
@@ -72,10 +73,43 @@ export async function GET() {
           }
           continue
         }
+
+        // Parse narrative responses CSV format
+        if (/ghac-narrative-responses/i.test(src.name)) {
+          const rows = table.slice(1) // Skip header
+          for (const r of rows) {
+            // Column 0: How Arts Affect Your Life, Column 1: If You Could Change One Thing
+            const artsAffectText = (r[0] || '').trim()
+            const changeOneThingText = (r[1] || '').trim()
+            
+            if (artsAffectText && artsAffectText.length > 20) {
+              out.push({ 
+                question: "How have the arts touched your life personally?", 
+                text: artsAffectText.replace(/^\[.*?\]\s*/, '').replace(/^"(.*)"$/, '$1')
+              })
+            }
+            
+            if (changeOneThingText && changeOneThingText.length > 20) {
+              out.push({ 
+                question: "What would you transform about arts organizations in Greater Hartford?", 
+                text: changeOneThingText.replace(/^\[.*?\]\s*/, '').replace(/^"(.*)"$/, '$1')
+              })
+            }
+          }
+          continue
+        }
       }
 
-      // Sort and limit
+      // Sort and limit - prioritize new narrative responses
       out.sort((a, b) => {
+        // Prioritize narrative responses from new CSV
+        const aIsNew = a.question.includes("How have the arts touched") || a.question.includes("transform")
+        const bIsNew = b.question.includes("How have the arts touched") || b.question.includes("transform")
+        
+        if (aIsNew && !bIsNew) return -1
+        if (!aIsNew && bIsNew) return 1
+        
+        // Secondary sort by date
         const ta = a.completed_at ? Date.parse(a.completed_at) : 0
         const tb = b.completed_at ? Date.parse(b.completed_at) : 0
         return tb - ta

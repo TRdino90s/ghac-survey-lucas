@@ -43,14 +43,7 @@ export default function DashboardPage() {
       .then((r) => r.json())
       .then((res) => {
         const k = res.metrics as Metrics
-        // Temporary display overrides per latest snapshot
-        setM({
-          ...k,
-          surveyStarts: 56,
-          completedSurveys: 18,
-          completionRatePct: 32.1,
-          averageDonationAmountUsd: 788,
-        })
+        setM(k)
       })
       .catch(() => setM(null))
     fetch('/api/question-breakdown')
